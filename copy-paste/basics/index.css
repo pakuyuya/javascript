@@ -1,0 +1,34 @@
+@charset "utf-8";
+
+.copy {
+    margin : 20px 0px 0px 3px;
+    width : 400px;
+    padding: 3px 5px 5px 5px;
+    background-color : #80FFAF;
+}
+
+.paste {
+    margin : 20px 0px 0px 3px;
+    width : 400px;
+    padding: 3px 5px 5px 5px;
+    background-color : #FFB763;
+}
+
+.bot-caption {
+    font-size : 24px;
+    font-family : "Courier";
+    line-height : 24px;
+    padding : 5px;
+}
+
+.bot-caption:first-letter {
+    font-size : 32px;
+}
+
+.bot-says {
+    font-family : "Courier";
+    padding-bottom : 5px;
+    padding-left : 10px;
+    font-size : 20px;
+    line-height : 35px;
+}
