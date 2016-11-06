@@ -22,7 +22,7 @@ jspm install
 
 http://localhost/test
 
-## How it made?
+## How made it?
 
 ```bash
 /var/www/html/test$ jspm init
