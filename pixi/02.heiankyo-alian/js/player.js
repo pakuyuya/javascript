@@ -8,13 +8,18 @@ class Player {
     constructor() {
         this.entityName = 'player';
 
-        this.events = [
-            'preUpdate',
-            'update',
-            'postUpdate',
-            'draw',
-            'attack',
-        ];
+        this.events = {
+            'preUpdate'  : 50,
+            'update'     : 50,
+            'postUpdate' : 50,
+            'draw'       : 50,
+            'attack'     : 50,
+        };
+
+        this.resources = {
+            images : [],
+            sounds : [],
+        }
 
         this.drawable = false;
     }
@@ -23,38 +28,45 @@ class Player {
      * 事前updateイベント
      * @param ctx
      */
-    preUpdate(ctx) {
-        
+    preUpdateEvent(ctx) {
+        // TODO:
     }
 
     /**
      * updateイベント
      * @param ctx
      */
-    update(ctx) {
-        
+    updateEvent(ctx) {
+        // TODO:
     }
 
     /**
      * 事後updateイベント
      * @param ctx
      */
-    preUpdate(ctx) {
-        
+    preUpdateEvent(ctx) {
+        // TODO:
     }
 
     /**
      * 描画イベント
      * @param ctx
      */
-    draw(ctx) {
-        
+    drawEvent(ctx) {
+        // TODO:
     }
 
     /**
      * 攻撃受けたイベント
      */
-    attack(ctx) {
+    attackEvent(ctx) {
+        // TODO:
+    }
 
+    /**
+     * リソースロードイベント
+     */
+    resourceLoadedEvent(ctx) {
+        // TODO:
     }
 }
