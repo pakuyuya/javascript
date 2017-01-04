@@ -1,0 +1,20 @@
+@startuml
+Seane ->  App : atacheEntity
+          App   ->  Entity : askResources
+          App   <-- Entity
+          App   ->  ResourceResolver : resolveResources
+                                         database ContentServer
+                    ResourceResolver ->> ContentServer : <<async>>HTTP Request
+          App   <-- ResourceResolver
+Seane <-- App
+
+...
+
+                      ResourceResolver <<-- ContentServer : <<async>>HTTP Resoponse
+          Entity  <-  ResourceResolver : <<Event>> resourceLoaded
+          Entity  --> ResourceResolver
+          App     <-  ResourceResolver : <<Event>> entityReady
+Seane <-  App : <<Event>> entityReady
+Seane --> App
+          App     --> ResourceResolver
+@enduml
