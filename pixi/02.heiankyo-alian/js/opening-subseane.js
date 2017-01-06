@@ -1,21 +1,21 @@
 'use strict';
 
 /**
- * プレイヤーエンティティ
+ * オープニングデモ用サブシーン
  */
-class Player {
+class OpneningSubSeane {
+    
     /**
      * コンストラクタ
      */
     constructor(args) {
-        this.entityName = 'Player';
+        this.entityName = 'OpneningSubSeane';
 
         this.events = {
             'preUpdate'  : 50,
             'update'     : 50,
             'postUpdate' : 50,
             'draw'       : 50,
-            'damage'     : 50,
             'readyResource' : 50,
         };
 
@@ -66,12 +66,4 @@ class Player {
     readyResourceEvent(ctx) {
         // TODO:
     }
-    
-    /**
-     * 攻撃受けたイベント
-     */
-    damageEvent(ctx) {
-        // TODO:
-    }
-
 }

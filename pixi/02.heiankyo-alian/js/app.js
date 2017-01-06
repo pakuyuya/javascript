@@ -6,6 +6,25 @@
 class App {
 
     /**
+     * コンストラクタ
+     */
+    constructor(args) {
+        this.entityName = 'App';
+
+        this.events = [
+            'readyEntity',
+        ];
+        
+        const initArgs = { app : this };
+        
+        this.eventEmitter     = new EventEmitter(initArgs);
+        this.inputHander      = new InputHandler(initArgs);
+        this.resourceResolver = new ResourceResolver(initArgs);
+
+        this.seane = null;
+    }
+
+    /**
      * アプリケーションを起動します
      * @param config
      */
@@ -68,9 +87,22 @@ class App {
 
     /**
      * エンティティ準備完了イベント
+     * 
+     * @param ctx コンテキスト
      */
-    entityReadyEvent(ctx) {
+    readyEntityEvent(ctx) {
         // TODO:
         // 例えばリソースロードが 90% いったら次いってみようみたいな
+    }
+
+    /**
+     * シーンを切り替えます。
+     * 
+     * @param newSeane 新しいシーン
+     */
+    switchSeane(newSeane) {
+        this.removeEntity(this.seane);
+        this.attachEntity(this.seane);
+        this.seane = newSeane;
     }
 }

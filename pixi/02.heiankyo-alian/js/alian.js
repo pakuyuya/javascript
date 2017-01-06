@@ -1,21 +1,20 @@
 'use strict';
 
 /**
- * プレイヤーエンティティ
+ * エイリアンエンティティ
  */
-class Player {
-    /**
-     * コンストラクタ
-     */
+class Alian {
+    
     constructor(args) {
-        this.entityName = 'Player';
+        this.entityName = 'Alian';
 
         this.events = {
-            'preUpdate'  : 50,
-            'update'     : 50,
-            'postUpdate' : 50,
-            'draw'       : 50,
-            'damage'     : 50,
+            'preUpdate'     : 50,
+            'update'        : 50,
+            'postUpdate'    : 50,
+            'draw'          : 50,
+            'dropHoll'      : 50,
+            'closeHoll'     : 50,
             'readyResource' : 50,
         };
 
@@ -28,6 +27,7 @@ class Player {
         this.drawable = false;
     }
 
+    
     /**
      * 事前updateイベント
      * @param ctx
@@ -66,12 +66,51 @@ class Player {
     readyResourceEvent(ctx) {
         // TODO:
     }
-    
+
     /**
      * 攻撃受けたイベント
      */
-    damageEvent(ctx) {
+    dropHollEvent(ctx) {
         // TODO:
     }
 
+    /**
+     * 攻撃受けたイベント
+     */
+    closeHollEvent(ctx) {
+        // TODO:
+    }
+
+    
+    /**
+     * 事前updateイベント
+     * @param ctx
+     */
+    preUpdateEvent(ctx) {
+        // TODO:
+    }
+
+    /**
+     * updateイベント
+     * @param ctx
+     */
+    updateEvent(ctx) {
+        // TODO:
+    }
+
+    /**
+     * 事後updateイベント
+     * @param ctx
+     */
+    preUpdateEvent(ctx) {
+        // TODO:
+    }
+
+    /**
+     * 描画イベント
+     * @param ctx
+     */
+    drawEvent(ctx) {
+        // TODO:
+    }
 }

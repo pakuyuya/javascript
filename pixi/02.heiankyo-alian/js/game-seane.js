@@ -1,21 +1,22 @@
 'use strict';
 
 /**
- * プレイヤーエンティティ
+ * ゲーム実行中シーン
  */
-class Player {
+class GameSeane {
+    
     /**
      * コンストラクタ
+     * @param args 
      */
     constructor(args) {
-        this.entityName = 'Player';
+        this.entityName = 'GameSeane';
 
         this.events = {
             'preUpdate'  : 50,
             'update'     : 50,
             'postUpdate' : 50,
             'draw'       : 50,
-            'damage'     : 50,
             'readyResource' : 50,
         };
 
@@ -24,8 +25,10 @@ class Player {
             sounds : [],
         }
 
-        this.app = args.app;
         this.drawable = false;
+
+        this.app = args.app;
+        this.switchSubSeane(OpeningSubSeane);
     }
 
     /**
@@ -66,12 +69,15 @@ class Player {
     readyResourceEvent(ctx) {
         // TODO:
     }
-    
-    /**
-     * 攻撃受けたイベント
-     */
-    damageEvent(ctx) {
-        // TODO:
-    }
 
+    /**
+     * サブシーンを切り替えます。
+     * 
+     * @param newSeane 新しいシーン
+     */
+    switchSubSeane(newSeane) {
+        this.app.removeEntity(this.seane);
+        this.app.ttachEntity(this.seane);
+        this.subSeane = newSeane;
+    }
 }

@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * プレイヤーエンティティ
+ * 穴エンティティ
  */
-class Player {
+class Holl {
     /**
      * コンストラクタ
      */
@@ -11,12 +11,14 @@ class Player {
         this.entityName = 'Player';
 
         this.events = {
-            'preUpdate'  : 50,
-            'update'     : 50,
-            'postUpdate' : 50,
-            'draw'       : 50,
-            'damage'     : 50,
+            'preUpdate'     : 50,
+            'update'        : 50,
+            'postUpdate'    : 50,
+            'draw'          : 50,
             'readyResource' : 50,
+            'escapeEntity'  : 50,
+            'digHoll'       : 50,
+            'fillHoll'      : 50,
         };
 
         this.resources = {
@@ -62,15 +64,25 @@ class Player {
 
     /**
      * リソースロードイベント
+     * @param ctx
      */
     readyResourceEvent(ctx) {
         // TODO:
     }
     
     /**
-     * 攻撃受けたイベント
+     * 穴掘りイベント
+     * @param ctx
      */
-    damageEvent(ctx) {
+    digHollEvent(ctx) {
+        // TODO:
+    }
+
+    /**
+     * 穴埋めイベント
+     * @param ctx
+     */
+    fillHollEvent(ctx) {
         // TODO:
     }
 

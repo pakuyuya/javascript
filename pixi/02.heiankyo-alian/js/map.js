@@ -1,21 +1,21 @@
 'use strict';
 
 /**
- * プレイヤーエンティティ
+ * マップ
  */
-class Player {
+class Map {
+
     /**
      * コンストラクタ
      */
     constructor(args) {
-        this.entityName = 'Player';
+        this.entityName = 'Map';
 
         this.events = {
             'preUpdate'  : 50,
             'update'     : 50,
             'postUpdate' : 50,
             'draw'       : 50,
-            'damage'     : 50,
             'readyResource' : 50,
         };
 
@@ -66,12 +66,4 @@ class Player {
     readyResourceEvent(ctx) {
         // TODO:
     }
-    
-    /**
-     * 攻撃受けたイベント
-     */
-    damageEvent(ctx) {
-        // TODO:
-    }
-
 }

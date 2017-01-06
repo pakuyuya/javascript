@@ -4,10 +4,16 @@
  * イベントエミッター
  */
 class EventEmitter {
-    constructor(parent) {
+
+    /**
+     * コンストラクタ
+     */
+    constructor(args) {
         this.fireWorks = {};
         this.parent = parent;
         this.app    = app;
+
+        this.app = args.app;
     }
 
     /**
