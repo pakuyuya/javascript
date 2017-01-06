@@ -1,6 +1,6 @@
 @startuml
 App o-- ResourceResolver
-App o-- EntityObserver
+App o-- EntityEmitter
 App o-- InputHolder
 App o-- Seane
 
