@@ -52,11 +52,23 @@ class EventEmitter {
      */
     fireEach(event, sender, data = {}) {
         const entites = this.fireWorks[event] || {};
-        for (const eneity of entites) {
+        for (const entity of entites) {
             const ctx = {
                 sender : sender,
                 data : data,
-            }
+            };
+            (entity[event + 'Event'])(ctx);
         }
+    }
+
+    /**
+     * イベント発火
+     */
+    fire(event, entity, sender, data = {}) {
+        const ctx = {
+            sender : sender,
+            data : data,
+        }
+        (entity[event + 'Event'])(ctx);
     }
 }

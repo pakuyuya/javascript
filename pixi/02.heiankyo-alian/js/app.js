@@ -29,15 +29,48 @@ class App {
      * @param config
      */
     launch(config) {
-        // TODO:
+        config = Object.assign(
+            config,
+            {
+                defaultSeane : TitleSeane,
+            }
+        );
+
+        this.switchSeane(new config.defaultSeane({app : this}));
     }
 
     /**
-     * エンティティを保持します。
+     * エンティティを追加します。
      * @param entity エンティティ
      */
     attachEntity(entity) {
-        // TODO:
+        const self = this;
+        this.eventEmitter.attacheEntity(entity);
+
+        let onloadParams = { app : this };
+        let promises = [];        
+        if (entity.images) {
+            let promise = this.resourceResolver
+                              .resolveImages(entity.images)
+                              .success((images) => {
+                                  onloadParams.data.images = images;
+                              });
+            promises.push(promise);
+        }
+        if (entity.sounds) {
+            let promise = this.resourceResolver
+                              .resolveSounds(entity.sounds)
+                              .success((sounds) => {
+                                  onloadParams.data.sounds = sounds;
+                              });
+            promises.push(promise);
+        }
+
+        promises
+            .join(promises)
+            .success((resolve, reject) => {
+                self.fire('readyResource', entity, opt);
+            });
     }
 
     /**
@@ -45,14 +78,17 @@ class App {
      * @param entity エンティティそのものかエンティティID
      */
     removeEntity(entity) {
-        // TODO:
+        this.eventEmitter.removeEntity(entity);
     }
 
     /**
      * すべてのエンティティに対してイベントを発火します。
      */
-    fireEach(event, data) {
-        // TODO:
+    fireEach(event, opt = {}) {
+        let sender = opt.sender || app;
+        let data = opt.data || {};
+
+        this.eventEmitter.fireEach('event', snder, data);
     }
 
     /**
@@ -62,26 +98,28 @@ class App {
      * @param entity
      * @param data
      */
-    fire(event, entity, data) {
-        // TODO:
+    fire(event, entity, opt = {}) {
+        let sender = opt.sender || app;
+        let data = opt.data || {};
+        this.eventEmitter.fire(event, entity, sender, data);
     }
 
     /**
      * サブシーンやエンティティにサブリソースを問い合わせします。
      * 
+     * @param opts オプション
      * @return リソースリクエストリスト
      */
-    askResources() {
-        // TODO:
+    askResources(enitity, opts = {}) {
     }
 
     /**
      * リソースのリクエストを開始します
      * 
      * @param resourceRequests リソースリクエストリスト
-     * @param options オプション
+     * @param opts オプション
      */
-    startLoadResources(resourceRequests, options) {
+    startLoadResources(resourceRequests, opts = {}) {
         // TODO: 
     }
 
