@@ -24,8 +24,8 @@ class EventEmitter {
     attachEntity(entity, events = entity.events || {}) {
         for (const event in events) {
             const priority = events[event];
-            const priorities = this.fireWorks[event] || [];
-            const entities = priorities[priority] || {};
+            let priorities = this.fireWorks[event] || [];
+            let entities = priorities[priority] || {};
             entites[Symbol.for(entity)] = entity;
             priorities[priority] = entities;
             this.fireWorks[event] = priorities;
@@ -40,8 +40,8 @@ class EventEmitter {
     detachEntity(entity, events = entity.events || {}) {
         for (const event of events) {
             this.fireWorks[event] = this.fireWorks[event] || {};
-            const priorities = this.fireWorks[event] || [];
-            const entities = priorities[priority] || {};
+            let priorities = this.fireWorks[event] || [];
+            let entities = priorities[priority] || {};
             delete entites[Symbol.for(entity)];
             // Note: prioritiesとeventは消えないけどボトルネックにはならんだろうなぁ
         }
@@ -49,6 +49,9 @@ class EventEmitter {
 
     /**
      * イベント発火
+     * @param event
+     * @param sender
+     * @param data
      */
     fireEach(event, sender, data = {}) {
         const entites = this.fireWorks[event] || {};
@@ -63,12 +66,18 @@ class EventEmitter {
 
     /**
      * イベント発火
+     * @param event
+     * @param entity
+     * @param sender
+     * @param data
      */
     fire(event, entity, sender, data = {}) {
         const ctx = {
             sender : sender,
             data : data,
         }
-        (entity[event + 'Event'])(ctx);
+        if (entity.events[event]) {
+            (entity[event + 'Event'])(ctx);
+        }
     }
 }

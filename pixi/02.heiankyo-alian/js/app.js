@@ -22,6 +22,9 @@ class App {
         this.resourceResolver = new ResourceResolver(initArgs);
 
         this.seane = null;
+        this.entityInfos = {};
+        this.entityCount = 0;
+        this.notReadyEntityCount = 0;
     }
 
     /**
@@ -44,11 +47,43 @@ class App {
      * @param entity エンティティ
      */
     attachEntity(entity) {
-        const self = this;
-        this.eventEmitter.attacheEntity(entity);
+        this.entityCount++;
+        this.notReadyEntityCount++;
+        this.entityInfos.push({
+            entity : entity,
+            ready : false,
+            asking : false,
+        });
 
-        let onloadParams = { app : this };
-        let promises = [];        
+        // register event
+        this.eventEmitter.attacheEntity(entity);
+    }
+
+    /**
+     * 全エンティティのリソースの読み込みを開始します。
+     */
+    loadAllAttachedEntity() {
+        for (let entityInfo of this.entityInfos) {
+            if (!entityInfo.ready) {
+                this.loadEntityResources(entityInfo);
+            }
+        }
+    }
+
+    /**
+     * 対象のEntityのリソースを読み込みます。
+     * 読み込み後、EntityにresourceReadyイベント、AppにentityReadyイベントを通知します。
+     * @param entity 対象のEntity
+     * @param entityInfo 対象のエンティティ情報。
+     * @return Promise
+     */
+    loadEntityResources(entityInfo) {
+        const entity = entityInfo.entity;
+
+        entityInfo.asking = true;
+
+        let readyResourcesCtx = {};
+        let promises = [];
         if (entity.images) {
             let promise = this.resourceResolver
                               .resolveImages(entity.images)
@@ -66,10 +101,14 @@ class App {
             promises.push(promise);
         }
 
-        promises
+        return promises
             .join(promises)
-            .success((resolve, reject) => {
-                self.fire('readyResource', entity, opt);
+            .success(() => {
+                this.notReadyEntityCount--;
+                entityInfo.asking = false;
+                entityInfo.ready = true;
+                self.fire('readyResource', entity, Object.assign(readyResourcesCtx, { app : app }));
+                self.fire('readyEntity', self, {app : app, entity: entity})
             });
     }
 
@@ -78,15 +117,23 @@ class App {
      * @param entity エンティティそのものかエンティティID
      */
     removeEntity(entity) {
+        for (let idx in this.entityInfos) {
+            if (this.entityInfos[idx].entity === entity) {
+                delete this.entityInfos[idx];
+                break;
+            }
+        }
         this.eventEmitter.removeEntity(entity);
     }
 
     /**
      * すべてのエンティティに対してイベントを発火します。
+     * @param event
+     * @param opt
      */
-    fireEach(event, opt = {}) {
-        let sender = opt.sender || app;
-        let data = opt.data || {};
+    fireEach(event, opts = {}) {
+        let sender = opts.sender || app;
+        let data = opts.data || {};
 
         this.eventEmitter.fireEach('event', snder, data);
     }
@@ -98,29 +145,10 @@ class App {
      * @param entity
      * @param data
      */
-    fire(event, entity, opt = {}) {
-        let sender = opt.sender || app;
-        let data = opt.data || {};
+    fire(event, entity, opts = {}) {
+        let sender = opts.sender || app;
+        let data = opts.data || {};
         this.eventEmitter.fire(event, entity, sender, data);
-    }
-
-    /**
-     * サブシーンやエンティティにサブリソースを問い合わせします。
-     * 
-     * @param opts オプション
-     * @return リソースリクエストリスト
-     */
-    askResources(enitity, opts = {}) {
-    }
-
-    /**
-     * リソースのリクエストを開始します
-     * 
-     * @param resourceRequests リソースリクエストリスト
-     * @param opts オプション
-     */
-    startLoadResources(resourceRequests, opts = {}) {
-        // TODO: 
     }
 
     /**
@@ -129,8 +157,7 @@ class App {
      * @param ctx コンテキスト
      */
     readyEntityEvent(ctx) {
-        // TODO:
-        // 例えばリソースロードが 90% いったら次いってみようみたいな
+        if ()
     }
 
     /**
