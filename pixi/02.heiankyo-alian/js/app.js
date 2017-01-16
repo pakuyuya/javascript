@@ -8,7 +8,21 @@ class App {
     /**
      * コンストラクタ
      */
-    constructor(args) {
+    constructor(args = {}) {
+        const self = this;
+
+        this.synonym = Symbol();
+
+        this.fps = args.fps || 30;
+        this.keyboardMap = {
+            'z' : 'a',
+            'x' : 'b',
+            'allowup'    : 'up',
+            'allowdown'  : 'down',
+            'allowleft'  : 'left',
+            'allowright' : 'right',
+        };
+
         this.entityName = 'App';
 
         this.events = [
@@ -24,6 +38,24 @@ class App {
         this.seane = null;
 
         this.attachEntity(this.inputHandler);
+
+        // set events on window.
+        if (!document.body[this.synonym]) {
+            document.body.addEventListener('keydown', (ev) => {
+                const key = ev.key.toLowerCase;
+                if (self.keyboardMap[key]) {
+                    self.pushKey(self.keyboardMap[key]);
+                }
+            });
+            document.body.addEventListener('keyup', (ev) => {
+                const key = ev.key.toLowerCase;
+                if (self.keyboardMap[key]) {
+                    self.leftKey(self.keyboardMap[key]);
+                }
+            });
+            document.body[this.synonym] = true;
+        }
+
     }
 
     /**
@@ -136,6 +168,22 @@ class App {
         let sender = opts.sender || this;
         let data = opts.data || {};
         this.eventEmitter.fire(event, entity, sender, data);
+    }
+
+    /**
+     * キー入力
+     * @param key
+     */
+    pushKey(key) {
+        this.inputHandler.push(key);
+    }
+
+    /**
+     * キーを離す
+     * @param key
+     */
+    leftKey(key) {
+        this.inputHandler.left(key);
     }
 
     /**
