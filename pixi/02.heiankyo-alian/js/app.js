@@ -152,8 +152,15 @@ class App {
      * @param newSeane 新しいシーン
      */
     switchSeane(newSeane) {
+        const opts = {
+            app : this,
+        };
+
+        this.fire('laeveSeane', this.sean, opts)
         this.removeEntity(this.seane);
-        this.attachEntity(this.seane);
+        
         this.seane = newSeane;
+        this.attachEntity(newSeane);
+        this.fire('enterSeane', newSeane, opts)
     }
 }

@@ -89,8 +89,17 @@ class TitleSeane {
 
     /**
      * リソースロードイベント
+     * @param ctx
      */
     readyResourceEvent(ctx) {
         // TODO:
+    }
+
+    /**
+     * シーン終了イベント
+     * @param ctx
+     */
+    leaveSeaneEvent(ctx) {
+        this.removeAllEntities();
     }
 }
