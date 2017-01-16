@@ -75,7 +75,7 @@ class TitleSeane {
      * 事後updateイベント
      * @param ctx
      */
-    preUpdateEvent(ctx) {
+    postUpdateEvent(ctx) {
         // TODO:
     }
 

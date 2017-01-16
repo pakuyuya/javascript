@@ -22,6 +22,8 @@ class App {
         this.resourceResolver = new ResourceResolver(initArgs);
 
         this.seane = null;
+
+        this.attachEntity(this.inputHandler);
     }
 
     /**
@@ -44,7 +46,7 @@ class App {
      * @param entity エンティティ
      */
     attachEntity(entity) {
-        this.eventEmitter.attacheEntity(entity);
+        this.eventEmitter.attachEntity(entity);
         this.loadEntityResources(entityInfo);
     }
 
