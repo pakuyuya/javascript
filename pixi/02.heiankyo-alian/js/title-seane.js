@@ -26,6 +26,33 @@ class TitleSeane {
 
         this.app = args.app;
         this.drawable = false;
+
+        this.entities = {};
+    }
+
+    /**
+     * エンティティをAttachする
+     */
+    attachEntity(entity) {
+        const key = Symbol();
+        entity['$$hk' + this.entityName] = key;
+        this.entities[key] = entity;
+
+        this.app.attachEntity(entity);
+    }
+
+    removeEntity(entity) {
+        const key = entity['$$hk' + this.entityName];
+        if (key) {
+            delete this.entities[key];
+        }
+        this.app.detachEntity(entity);
+    }
+
+    removeAllEntities() {
+        for (const entity of this.entities) {
+            removeEntity(entity);
+        }
     }
 
     /**
