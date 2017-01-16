@@ -22,9 +22,6 @@ class App {
         this.resourceResolver = new ResourceResolver(initArgs);
 
         this.seane = null;
-        this.entityInfos = {};
-        this.entityCount = 0;
-        this.notReadyEntityCount = 0;
     }
 
     /**
@@ -47,69 +44,8 @@ class App {
      * @param entity エンティティ
      */
     attachEntity(entity) {
-        this.entityCount++;
-        this.notReadyEntityCount++;
-        this.entityInfos.push({
-            entity : entity,
-            ready : false,
-            asking : false,
-        });
-
-        // register event
         this.eventEmitter.attacheEntity(entity);
-    }
-
-    /**
-     * 全エンティティのリソースの読み込みを開始します。
-     */
-    loadAllAttachedEntity() {
-        for (let entityInfo of this.entityInfos) {
-            if (!entityInfo.ready) {
-                this.loadEntityResources(entityInfo);
-            }
-        }
-    }
-
-    /**
-     * 対象のEntityのリソースを読み込みます。
-     * 読み込み後、EntityにresourceReadyイベント、AppにentityReadyイベントを通知します。
-     * @param entity 対象のEntity
-     * @param entityInfo 対象のエンティティ情報。
-     * @return Promise
-     */
-    loadEntityResources(entityInfo) {
-        const entity = entityInfo.entity;
-
-        entityInfo.asking = true;
-
-        let readyResourcesCtx = {};
-        let promises = [];
-        if (entity.images) {
-            let promise = this.resourceResolver
-                              .resolveImages(entity.images)
-                              .success((images) => {
-                                  onloadParams.data.images = images;
-                              });
-            promises.push(promise);
-        }
-        if (entity.sounds) {
-            let promise = this.resourceResolver
-                              .resolveSounds(entity.sounds)
-                              .success((sounds) => {
-                                  onloadParams.data.sounds = sounds;
-                              });
-            promises.push(promise);
-        }
-
-        return promises
-            .join(promises)
-            .success(() => {
-                this.notReadyEntityCount--;
-                entityInfo.asking = false;
-                entityInfo.ready = true;
-                self.fire('readyResource', entity, Object.assign(readyResourcesCtx, { app : app }));
-                self.fire('readyEntity', self, {app : app, entity: entity})
-            });
+        this.loadEntityResources(entityInfo);
     }
 
     /**
@@ -117,13 +53,62 @@ class App {
      * @param entity エンティティそのものかエンティティID
      */
     removeEntity(entity) {
-        for (let idx in this.entityInfos) {
-            if (this.entityInfos[idx].entity === entity) {
-                delete this.entityInfos[idx];
-                break;
-            }
-        }
+        // イベント
         this.eventEmitter.removeEntity(entity);
+    }
+
+    /**
+     * 対象のEntityのリソースを読み込みます。
+     * 読み込み後、EntityにresourceReadyイベント、AppにentityReadyイベントを通知します。
+     * @param entity 対象のEntity
+     * @return Promise
+     */
+    loadEntityResources(entity) {
+        let readyResourcesCtx = {data : {} };
+        let promises = [];
+        if (entity.images) {
+            let promise = 
+                this.loadImages(entity.images)
+                    .success((images) => {
+                        readyResourcesCtx.data.images = images;
+                    });
+            promises.push(promise);
+        }
+
+        if (entity.sounds) {
+            let promise = 
+                this.loadSounds(entity.sounds)
+                    .success((sounds) => {
+                        readyResourcesCtx.data.sounds = sounds;
+                    });
+            promises.push(this.loadSounds(entity.sounds));
+        }
+
+        return Primise.join(promises)
+                .success(() => {
+                    self.fire('readyResource', entity, Object.assign(readyResourcesCtx, { app : app }));
+                    self.fire('readyEntity', self, {app : app, entity: entity})
+                });
+    }
+
+    /**
+     * 画像リソースを読み込みます。
+     * @param images URLの配列
+     * @return Promise
+     */
+    loadImages(images) {
+        return this.resourceResolver
+                    .resolveImages(entity.images);
+    }
+
+    /**
+     * 音声リソースを読み込みます。
+     * @param sounds URLの配列
+     * @return Promise
+     */
+    loadSounds(sounds) {
+        return this.resourceResolver
+                    .resolveSounds(entity.sounds);
     }
 
     /**
@@ -132,7 +117,7 @@ class App {
      * @param opt
      */
     fireEach(event, opts = {}) {
-        let sender = opts.sender || app;
+        let sender = opts.sender || this;
         let data = opts.data || {};
 
         this.eventEmitter.fireEach('event', snder, data);
@@ -146,18 +131,17 @@ class App {
      * @param data
      */
     fire(event, entity, opts = {}) {
-        let sender = opts.sender || app;
+        let sender = opts.sender || this;
         let data = opts.data || {};
         this.eventEmitter.fire(event, entity, sender, data);
     }
 
     /**
      * エンティティ準備完了イベント
-     * 
      * @param ctx コンテキスト
      */
     readyEntityEvent(ctx) {
-        if ()
+        // Do nothing for now.
     }
 
     /**
