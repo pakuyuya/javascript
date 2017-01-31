@@ -59,7 +59,7 @@ export function getInvalidMessage(element, errorMessages) {
  * @param element
  * @param errorMessages
  */
-export function chargeInvalidMessage(element, errorMessages = defaultErrorMessages){
-    const msg = getInvalidMessage(element, errorMessages);
+export function chargeInvalidMessage(element, errorMessages){
+    const msg = getInvalidMessage(element, errorMessages || {});
     element.setCustomValidity(msg);
 }
