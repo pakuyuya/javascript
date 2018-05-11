@@ -3,9 +3,11 @@
 var elmTx = forId('tx');
 
 elmTx.addEventListener('copy', function(e) {
+  console.log(e);
     boty('copy', 'Copy', window.getSelection().toString());
 });
 elmTx.addEventListener('paste', function(e) {
+  console.log(e);
     boty('paste', 'paste', e.clipboardData.getData('Text'));
 });
 
