@@ -87,10 +87,10 @@ export default class {
 
         // タイマー作動
         this.tick = new IntervalTimer(() => {
-            this.EventEmitter.fireEach('preUpdate', this)
-            this.EventEmitter.fireEach('update', this)
-            this.EventEmitter.fireEach('postUpdate', this)
-            this.EventEmitter.fireEach('draw', this)
+            this.fireEach('preUpdate')
+            this.fireEach('update')
+            this.fireEach('postUpdate')
+            this.fireEach('draw')
         }, ~~(1000/this.fps))
 
         this.switchSeane(new config.defaultSeane({app : this}))
@@ -164,7 +164,7 @@ export default class {
                                 resourceType: 'texture',
                                 resource: textures
                             }
-                            this.eventEmitter.fire('readyResource', owner, this, data)
+                            this.fire('readyResource', owner, {sender: this, data: data})
                         }
                         return textures
                     })
@@ -186,7 +186,7 @@ export default class {
                                 resourceType: 'sound',
                                 resource: sounds
                             }
-                            this.eventEmitter.fire('readyResource', owner, this, data)
+                            this.fire('readyResource', owner, {sender: this, data: data})
                         }
                         return sounds
                     })
