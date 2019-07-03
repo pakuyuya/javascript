@@ -51,6 +51,9 @@ export default class {
         // 現在の描画シーン
         this.seane = null
 
+        // レンダラなど
+        this.stage = null
+
         // inputHandlerに追加
         this.attachEntity(this.inputHandler)
 
