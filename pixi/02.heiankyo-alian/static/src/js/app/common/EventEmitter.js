@@ -1,19 +1,17 @@
-'use strict';
-
 /**
  * イベントエミッター
+ * という名のObserver
  */
-class EventEmitter {
-
+module.exports = class EventEmmitter {
     /**
      * コンストラクタ
      */
     constructor(args) {
-        this.fireWorks = {};
-        this.parent = parent;
-        this.app    = app;
+        this.fireWorks = {}
+        this.parent = parent
+        this.app    = app
 
-        this.app = args.app;
+        this.app = args.app
     }
 
     /**
@@ -23,12 +21,12 @@ class EventEmitter {
      */
     attachEntity(entity, events = entity.events || {}) {
         for (const event in events) {
-            const priority = events[event];
-            let priorities = this.fireWorks[event] || [];
-            let entities = priorities[priority] || {};
-            entites[Symbol.for(entity)] = entity;
-            priorities[priority] = entities;
-            this.fireWorks[event] = priorities;
+            const priority = events[event]
+            let priorities = this.fireWorks[event] || []
+            let entities = priorities[priority] || {}
+            entites[Symbol.for(entity)] = entity
+            priorities[priority] = entities
+            this.fireWorks[event] = priorities
         }
     }
 
@@ -39,10 +37,10 @@ class EventEmitter {
      */
     detachEntity(entity, events = entity.events || {}) {
         for (const event of events) {
-            this.fireWorks[event] = this.fireWorks[event] || {};
-            let priorities = this.fireWorks[event] || [];
-            let entities = priorities[priority] || {};
-            delete entites[Symbol.for(entity)];
+            this.fireWorks[event] = this.fireWorks[event] || {}
+            let priorities = this.fireWorks[event] || []
+            let entities = priorities[priority] || {}
+            delete entites[Symbol.for(entity)]
             // Note: prioritiesとeventは消えないけどボトルネックにはならんだろうなぁ
         }
     }
@@ -54,13 +52,9 @@ class EventEmitter {
      * @param data
      */
     fireEach(event, sender, data = {}) {
-        const entites = this.fireWorks[event] || {};
+        const entites = this.fireWorks[event] || {}
         for (const entity of entites) {
-            const ctx = {
-                sender : sender,
-                data : data,
-            };
-            (entity[event + 'Event'])(ctx);
+            this.fire(event, entity, sender, data)
         }
     }
 
@@ -77,7 +71,7 @@ class EventEmitter {
             data : data,
         }
         if (entity.events[event]) {
-            (entity[event + 'Event'])(ctx);
+            (entity[event + 'Event'])(ctx)
         }
     }
 }

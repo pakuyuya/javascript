@@ -1,19 +1,25 @@
-'use strict';
+import EventEmitter from './common/EventEmitter'
+import InputHandler from './common/InputHandler'
+import ResourceResolver from './common/ResourceResolver'
 
 /**
  * アプリケーション
  */
-class App {
 
+export default class {
     /**
      * コンストラクタ
      */
     constructor(args = {}) {
-        const self = this;
+        const self = this
 
-        this.synonym = Symbol();
+        // これなんだっけ
+        this.synonym = Symbol()
 
-        this.fps = args.fps || 30;
+        // fps.
+        this.fps = args.fps || 30
+
+        // キーボードのマッピング。
         this.keyboardMap = {
             'z' : 'a',
             'x' : 'b',
@@ -21,39 +27,47 @@ class App {
             'allowdown'  : 'down',
             'allowleft'  : 'left',
             'allowright' : 'right',
-        };
+        }
 
-        this.entityName = 'App';
+        // 確かデバッグ用のフィールド
+        this.entityName = 'App'
 
+        // 受け付けるイベントの種別。EventEmitter参照
         this.events = [
             'readyEntity',
-        ];
+        ]
         
-        const initArgs = { app : this };
+        const initArgs = {
+            app : this,
+            baseurl : (window.location.origin + '/' + window.location.pathname.replace('/?index.html$', ''))
+        }
         
-        this.eventEmitter     = new EventEmitter(initArgs);
-        this.inputHander      = new InputHandler(initArgs);
-        this.resourceResolver = new ResourceResolver(initArgs);
+        // 各コア機能
+        this.eventEmitter     = new EventEmitter(initArgs)
+        this.inputHander      = new InputHandler(initArgs)
+        this.resourceResolver = new ResourceResolver(initArgs)
 
-        this.seane = null;
+        // 現在の描画シーン
+        this.seane = null
 
-        this.attachEntity(this.inputHandler);
+        
+        this.attachEntity(this.inputHandler)
 
         // set events on window.
         if (!document.body[this.synonym]) {
             document.body.addEventListener('keydown', (ev) => {
-                const key = ev.key.toLowerCase;
+                const key = ev.key.toLowerCase
                 if (self.keyboardMap[key]) {
-                    self.pushKey(self.keyboardMap[key]);
+                    self.pushKey(self.keyboardMap[key])
                 }
-            });
+            })
             document.body.addEventListener('keyup', (ev) => {
-                const key = ev.key.toLowerCase;
+                const key = ev.key.toLowerCase
                 if (self.keyboardMap[key]) {
-                    self.leftKey(self.keyboardMap[key]);
+                    self.leftKey(self.keyboardMap[key])
                 }
-            });
-            document.body[this.synonym] = true;
+            })
+            document.body[this.synonym] = true
         }
 
     }
@@ -68,9 +82,9 @@ class App {
             {
                 defaultSeane : TitleSeane,
             }
-        );
+        )
 
-        this.switchSeane(new config.defaultSeane({app : this}));
+        this.switchSeane(new config.defaultSeane({app : this}))
     }
 
     /**
@@ -78,8 +92,8 @@ class App {
      * @param entity エンティティ
      */
     attachEntity(entity) {
-        this.eventEmitter.attachEntity(entity);
-        this.loadEntityResources(entityInfo);
+        this.eventEmitter.attachEntity(entity)
+        this.loadEntityResources(entityInfo)
     }
 
     /**
@@ -88,7 +102,7 @@ class App {
      */
     removeEntity(entity) {
         // イベント
-        this.eventEmitter.removeEntity(entity);
+        this.eventEmitter.removeEntity(entity)
     }
 
     /**
@@ -98,31 +112,31 @@ class App {
      * @return Promise
      */
     loadEntityResources(entity) {
-        let readyResourcesCtx = {data : {} };
-        let promises = [];
+        let readyResourcesCtx = {data : {} }
+        let promises = []
         if (entity.images) {
             let promise = 
                 this.loadImages(entity.images)
                     .success((images) => {
-                        readyResourcesCtx.data.images = images;
-                    });
-            promises.push(promise);
+                        readyResourcesCtx.data.images = images
+                    })
+            promises.push(promise)
         }
 
         if (entity.sounds) {
             let promise = 
                 this.loadSounds(entity.sounds)
                     .success((sounds) => {
-                        readyResourcesCtx.data.sounds = sounds;
-                    });
-            promises.push(this.loadSounds(entity.sounds));
+                        readyResourcesCtx.data.sounds = sounds
+                    })
+            promises.push(this.loadSounds(entity.sounds))
         }
 
         return Primise.join(promises)
                 .success(() => {
-                    self.fire('readyResource', entity, Object.assign(readyResourcesCtx, { app : app }));
+                    self.fire('readyResource', entity, Object.assign(readyResourcesCtx, { app : app }))
                     self.fire('readyEntity', self, {app : app, entity: entity})
-                });
+                })
     }
 
     /**
@@ -132,7 +146,7 @@ class App {
      */
     loadImages(images) {
         return this.resourceResolver
-                    .resolveImages(entity.images);
+                    .resolveImages(entity.images)
     }
 
     /**
@@ -142,7 +156,7 @@ class App {
      */
     loadSounds(sounds) {
         return this.resourceResolver
-                    .resolveSounds(entity.sounds);
+                    .resolveSounds(entity.sounds)
     }
 
     /**
@@ -151,10 +165,10 @@ class App {
      * @param opt
      */
     fireEach(event, opts = {}) {
-        let sender = opts.sender || this;
-        let data = opts.data || {};
+        let sender = opts.sender || this
+        let data = opts.data || {}
 
-        this.eventEmitter.fireEach('event', snder, data);
+        this.eventEmitter.fireEach('event', snder, data)
     }
 
     /**
@@ -165,9 +179,9 @@ class App {
      * @param data
      */
     fire(event, entity, opts = {}) {
-        let sender = opts.sender || this;
-        let data = opts.data || {};
-        this.eventEmitter.fire(event, entity, sender, data);
+        let sender = opts.sender || this
+        let data = opts.data || {}
+        this.eventEmitter.fire(event, entity, sender, data)
     }
 
     /**
@@ -175,7 +189,7 @@ class App {
      * @param key
      */
     pushKey(key) {
-        this.inputHandler.push(key);
+        this.inputHandler.push(key)
     }
 
     /**
@@ -183,7 +197,7 @@ class App {
      * @param key
      */
     leftKey(key) {
-        this.inputHandler.left(key);
+        this.inputHandler.left(key)
     }
 
     /**
@@ -202,13 +216,14 @@ class App {
     switchSeane(newSeane) {
         const opts = {
             app : this,
-        };
+        }
 
         this.fire('laeveSeane', this.sean, opts)
-        this.removeEntity(this.seane);
+        this.removeEntity(this.seane)
         
-        this.seane = newSeane;
-        this.attachEntity(newSeane);
+        this.seane = newSeane
+        this.attachEntity(newSeane)
         this.fire('enterSeane', newSeane, opts)
     }
 }
+

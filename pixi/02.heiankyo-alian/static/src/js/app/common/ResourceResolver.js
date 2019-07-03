@@ -1,9 +1,9 @@
-'use strict';
+import common from './common'
 
 /**
  * リソースリゾルバ
  */
-class ResourceResolver {
+module.exports = class ResourceResolver {
     
     /**
      * コンストラクタ
@@ -26,7 +26,7 @@ class ResourceResolver {
                 .add(resources)
                 .setup(() => {
                     const images = resources.map((resource, index, ary) => {
-                        ary[resource] = PIXI.loader.resources[urlPath(this.baseurl, resource)].texture
+                        ary[resource] = PIXI.loader.resources[common.urlPath(this.baseurl, resource)].texture
                     });
                     resolve(images);
                 });
@@ -43,7 +43,7 @@ class ResourceResolver {
         let promises = resorces.map((resource, index, ary) => {
             ary[resource] = new Promise((resolve, reject) => {
                 const param = Object.assign({}, opt);
-                ret.src = [urlPath(args.baseurl, resource)];
+                ret.src = [common.urlPath(args.baseurl, resource)];
                 resolve(new Howl(param));
             });
         });

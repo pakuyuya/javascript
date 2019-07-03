@@ -1,7 +1,4 @@
-'use strict';
-
-class InputHandler {
-
+modules.exports = class InputHandler {
     constructor() {
         this.prevKeys = {};
         this.keys = {};

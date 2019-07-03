@@ -1,5 +1,5 @@
 'use strict';
 
-import app from './app/app'
+import App from './app/app'
 
-app.run()
+(new App()).launch({})
