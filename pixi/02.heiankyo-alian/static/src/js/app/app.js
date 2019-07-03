@@ -150,22 +150,46 @@ export default class {
 
     /**
      * 画像リソースを読み込みます。
-     * @param images URLの配列
-     * @return Promise
+     * @param urls URLの配列
+     * @param owner  readyResourceEvent の発火の形でコールバックを受けるオブジェクト
+     * @return Promise<Array<PIXI.texture>>
      */
-    loadImages(images) {
+    loadTextures(urls, owner) {
         return this.resourceResolver
-                    .resolveImages(entity.images)
+                    .resolveImages(urls)
+                    .then((textures) => {
+                        if (owner) {
+                            let data = {
+                                presented: 'loadTextures',
+                                resourceType: 'texture',
+                                resource: textures
+                            }
+                            this.eventEmitter.fire('readyResource', owner, this, data)
+                        }
+                        return textures
+                    })
     }
 
     /**
      * 音声リソースを読み込みます。
-     * @param sounds URLの配列
-     * @return Promise
+     * @param urls URLの配列
+     * @param owner  readyResourceEvent の発火の形でコールバックを受けるオブジェクト
+     * @return Promise<Array<Hawl>>
      */
-    loadSounds(sounds) {
+    loadSounds(urls) {
         return this.resourceResolver
-                    .resolveSounds(entity.sounds)
+                    .resolveSounds(urls)
+                    .then((sounds) => {
+                        if (owner) {
+                            let data = {
+                                presented: 'loadSounds',
+                                resourceType: 'sound',
+                                resource: sounds
+                            }
+                            this.eventEmitter.fire('readyResource', owner, this, data)
+                        }
+                        return sounds
+                    })
     }
 
     /**
