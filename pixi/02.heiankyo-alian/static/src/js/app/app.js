@@ -251,7 +251,7 @@ export default class {
             app : this,
         }
 
-        this.fire('laeveSeane', this.sean, opts)
+        this.fire('leaveSeane', this.sean, opts)
         this.removeEntity(this.seane)
         
         this.seane = newSeane
