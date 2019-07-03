@@ -1,6 +1,7 @@
 import EventEmitter from './common/EventEmitter'
 import InputHandler from './common/InputHandler'
 import ResourceResolver from './common/ResourceResolver'
+import Timer from './common/IntervalTimer'
 
 /**
  * アプリケーション
@@ -50,7 +51,7 @@ export default class {
         // 現在の描画シーン
         this.seane = null
 
-        
+        // inputHandlerに追加
         this.attachEntity(this.inputHandler)
 
         // set events on window.
@@ -83,6 +84,14 @@ export default class {
                 defaultSeane : TitleSeane,
             }
         )
+
+        // タイマー作動
+        this.tick = new IntervalTimer(() => {
+            this.EventEmitter.fireEach('preUpdate', this)
+            this.EventEmitter.fireEach('update', this)
+            this.EventEmitter.fireEach('postUpdate', this)
+            this.EventEmitter.fireEach('draw', this)
+        }, ~~(1000/this.fps))
 
         this.switchSeane(new config.defaultSeane({app : this}))
     }
