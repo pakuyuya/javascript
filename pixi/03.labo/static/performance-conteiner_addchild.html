@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>pixiデモ</title>
+  <meta charset="UTF-8">
+  <meta nam="description" content="pixi get start demo.">
+  <meta name="author" content="pakuyuya">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script src="vendor/pixi/pixi.min.js"></script>
+
+  <fieldset>
+      <legend>fps</legend>
+      <input type="text" id="fps" value="60" />
+    </fieldset>
+    <fieldset>
+      <legend>動作するSpriteの数</legend>
+      <input type="text" id="spritenum" value="1" />
+    </fieldset>
+  <fieldset>
+      <button type="button" class="button-resume" onclick="resumeTick_loopOnly()">stageにSpriteを入れたままレンダリング開始</button>
+      <button type="button" class="button-resume" onclick="resumeTick_inOutChild()">stageにSpriteを都度取り出してレンダリング開始</button>
+      <button type="button" class="button-stop" onclick="stopTick()">ループ停止</button>
+    </fieldset>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+"use strict"
+
+let g = {}
+const appConfig = {
+  imgRoot : './resources/',
+}
+
+/**
+ * 初期化処理
+ */
+function initialize() {
+  // レンダラを初期化する
+  const width = 256
+  const height = 256
+  const options = {
+    antialias : true,
+    transparent : true,
+    resolution : 1,
+  }
+  let renderer = PIXI.autoDetectRenderer(width, height, options)
+  g.renderer = renderer
+
+  // レンダラがデフォルトで持ってるview要素とかいうやつをbodyの子要素にぶちこむ
+  document.body.appendChild(renderer.view)
+
+  // ステージを作る
+  g.stage = new PIXI.Container()
+
+  let textures = {}
+  PIXI.loader
+      .add([appConfig.imgRoot + 'logo.png'])
+      .load(() => {})
+}
+
+initialize()
+
+
+function switchDisabled(toResume) {
+  document.querySelectorAll('.button-resume').forEach(element => element.disabled = toResume)
+  document.querySelectorAll('.button-stop').forEach(element => element.disabled = !toResume)
+}
+switchDisabled(false)
+
+function resumeTick_loopOnly () {
+  let fps = Number(document.querySelector('#fps').value)
+  if (fps === NaN) {
+    alert('fpsは半角数字で入力してください')
+    return
+  }
+
+  let spriteNum = Number(document.querySelector('#spritenum').value)
+  if (spriteNum === NaN && spriteNum > 0) {
+    alert('スプライト数は1以上の半角数字で入力してください')
+    return
+  }
+
+  switchDisabled(true)
+  g.requestStop = false
+
+  let msDuration = 1000 / fps
+  let doneCurrnentRendering = true
+
+  let sprites = ([...Array(spriteNum).keys()]).map(() => {
+    let sprite = new PIXI.Sprite(PIXI.loader.resources[appConfig.imgRoot + 'logo.png'].texture)
+    sprite.interactive = true
+    return sprite
+  })
+  sprites.forEach(s => g.stage.addChild(s))
+
+  // レンダリング
+  let f = (() => {
+    if (g.requestStop) {
+      sprites.forEach(s => g.stage.removeChild(s))
+      return
+    }
+    setTimeout(f, msDuration)
+    if (!doneCurrnentRendering) {
+      return
+    }
+    doneCurrnentRendering = false
+    
+    g.stage.rotation -= 0.05
+    g.renderer.render(g.stage)
+    doneCurrnentRendering = true
+  })
+  f()
+}
+
+function resumeTick_inOutChild () {
+  let fps = Number(document.querySelector('#fps').value)
+  if (fps === NaN) {
+    alert('fpsは半角数字で入力してください')
+    return
+  }
+  let spriteNum = Number(document.querySelector('#spritenum').value)
+  if (spriteNum === NaN && spriteNum > 0) {
+    alert('スプライト数は1以上の半角数字で入力してください')
+    return
+  }
+
+  switchDisabled(true)
+  g.requestStop = false
+
+  let msDuration = 1000 / fps
+  let doneCurrnentRendering = true
+
+  let sprites = ([...Array(spriteNum).keys()]).map(() => {
+    let sprite = new PIXI.Sprite(PIXI.loader.resources[appConfig.imgRoot + 'logo.png'].texture)
+    sprite.interactive = true
+    return sprite
+  })
+  sprites.forEach(s => g.stage.addChild(s))
+
+  // レンダリング
+  let f = (() => {
+    if (g.requestStop) {
+      sprites.forEach(s => g.stage.removeChild(s))
+      return
+    }
+    setTimeout(f, msDuration)
+    if (!doneCurrnentRendering) {
+      return
+    }
+    doneCurrnentRendering = false
+
+    sprites.forEach(s => g.stage.removeChild(s))
+    sprites.forEach(s => g.stage.addChild(s))
+
+    g.stage.rotation -= 0.05
+    g.renderer.render(g.stage)
+    doneCurrnentRendering = true
+  })
+  f()
+}
+
+function stopTick() {
+  switchDisabled(false)
+  g.requestStop = true
+}
+
+</script>
