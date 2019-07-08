@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>pixiデモ</title>
+  <meta charset="UTF-8">
+  <meta nam="description" content="pixi get start demo.">
+  <meta name="author" content="pakuyuya">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script src="vendor/pixi/pixi.min.js"></script>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+"use strict"
+
+let g = {}
+const appConfig = {
+  imgRoot : './resources/',
+}
+const fps = 60
+
+
+initialize()
+
+/**
+ * 初期化処理
+ */
+function initialize() {
+  // レンダラを初期化する
+  const width = 256
+  const height = 256
+  const options = {
+    antialias : true,
+    transparent : true,
+    resolution : 1,
+  }
+  let renderer = PIXI.autoDetectRenderer(width, height, options)
+  g.renderer = renderer
+
+  document.body.appendChild(renderer.view)
+
+  // ステージを作る
+  g.container = new PIXI.Container()
+  g.stage = new PIXI.Container()
+
+  let textures = {}
+  PIXI.loader
+      .add([appConfig.imgRoot + 'logo.png'])
+      .load(() => {
+        resumeTick()
+      })
+}
+
+
+function resumeTick() {
+  g.requestStop = false
+
+  let msDuration = 1000 / fps
+  let doneCurrnentRendering = true
+  
+  let sprite = new PIXI.Sprite(PIXI.loader.resources[appConfig.imgRoot + 'logo.png'].texture)
+  sprite.interactive = true
+
+  g.container.addChild(sprite)
+  g.stage.addChild(g.container)
+
+  // レンダリング
+  let f = (() => {
+    if (g.requestStop) {
+      g.stage.removeChild(sprite)
+      return
+    }
+    setTimeout(f, msDuration)
+    if (!doneCurrnentRendering) {
+      return
+    }
+    doneCurrnentRendering = false
+    g.renderer.render(g.stage)
+    doneCurrnentRendering = true
+  })
+  f()
+}
+
+</script>
