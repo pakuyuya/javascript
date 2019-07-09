@@ -1,7 +1,9 @@
 import EventEmitter from './common/EventEmitter'
 import InputHandler from './common/InputHandler'
 import ResourceResolver from './common/ResourceResolver'
-import Timer from './common/IntervalTimer'
+import IntervalTimer from './common/IntervalTimer'
+
+import * as PIXI from 'pixi.js'
 
 /**
  * アプリケーション
@@ -12,6 +14,12 @@ export default class {
      * コンストラクタ
      */
     constructor(args = {}) {
+        let defaultOption = {
+            width: 800,
+            height: 600,
+        }
+
+        args = Object.assign(defaultOption, args)
         const self = this
 
         // これなんだっけ
@@ -19,6 +27,9 @@ export default class {
 
         // fps.
         this.fps = args.fps || 30
+
+        this.width = args.width
+        this.height = args.height
 
         // キーボードのマッピング。
         this.keyboardMap = {
@@ -51,8 +62,11 @@ export default class {
         // 現在の描画シーン
         this.seane = null
 
-        // レンダラなど
-        this.stage = null
+        // アプリケーション
+        this.app = new PIXI.Application({
+            width: this.width,
+            height: this.height
+        })
 
         // inputHandlerに追加
         this.attachEntity(this.inputHandler)
@@ -96,7 +110,7 @@ export default class {
             this.fireEach('draw')
         }, ~~(1000/this.fps))
 
-        this.switchSeane(new config.defaultSeane({app : this}))
+        this.switchSeane(new config.defaultSeane({app: this}))
     }
 
     /**
@@ -105,6 +119,7 @@ export default class {
      */
     attachEntity(entity) {
         this.eventEmitter.attachEntity(entity)
+        this.eventEmitter.fire('attach', entitry, this, {app: this})
         this.loadEntityResources(entityInfo)
     }
 
@@ -114,6 +129,7 @@ export default class {
      */
     removeEntity(entity) {
         // イベント
+        this.eventEmitter.fire('remove', entitry, this, {app: this})
         this.eventEmitter.removeEntity(entity)
     }
 
@@ -160,17 +176,7 @@ export default class {
     loadTextures(urls, owner) {
         return this.resourceResolver
                     .resolveImages(urls)
-                    .then((textures) => {
-                        if (owner) {
-                            let data = {
-                                presented: 'loadTextures',
-                                resourceType: 'texture',
-                                resource: textures
-                            }
-                            this.fire('readyResource', owner, {sender: this, data: data})
-                        }
-                        return textures
-                    })
+                    .then((textures) => textures)
     }
 
     /**
@@ -182,17 +188,14 @@ export default class {
     loadSounds(urls) {
         return this.resourceResolver
                     .resolveSounds(urls)
-                    .then((sounds) => {
-                        if (owner) {
-                            let data = {
-                                presented: 'loadSounds',
-                                resourceType: 'sound',
-                                resource: sounds
-                            }
-                            this.fire('readyResource', owner, {sender: this, data: data})
-                        }
-                        return sounds
-                    })
+                    .then((sounds) => sounds)
+    }
+
+    /**
+     * stageの参照を取得します。
+     */
+    getStage() {
+        return this.app.stage
     }
 
     /**
@@ -204,7 +207,7 @@ export default class {
         let sender = opts.sender || this
         let data = opts.data || {}
 
-        this.eventEmitter.fireEach('event', snder, data)
+        this.eventEmitter.fireEach(event, sender, data)
     }
 
     /**

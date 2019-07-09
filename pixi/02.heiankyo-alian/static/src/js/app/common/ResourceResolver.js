@@ -3,7 +3,7 @@ import common from './common'
 /**
  * リソースリゾルバ
  */
-module.exports = class ResourceResolver {
+export default class ResourceResolver {
     
     /**
      * コンストラクタ

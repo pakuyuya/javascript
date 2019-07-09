@@ -9,6 +9,8 @@ class TitleSeane {
      * コンストラクタ
      */
     constructor(args) {
+        this.synonym = Symbol()
+
         this.entityName = 'TitleSeane';
 
         this.events = {
@@ -18,6 +20,7 @@ class TitleSeane {
             'draw'       : 50,
             'readyResource' : 50,
         };
+
 
         this.resources = {
             images : [],
@@ -96,10 +99,52 @@ class TitleSeane {
     }
 
     /**
+     * シーン開始イベント
+     * @param ctx
+     */
+    enterSeaneEvent(ctx) {
+        preInitGraphics()
+
+        if (!this.app[this.synonym]) {
+            attachApp()
+            this.app[this.synonym] = true
+        }
+    }
+
+    /**
+     * appに接続しリソースを初期化する
+     */
+    attachApp() {
+        this.stage.addChild(this.loadingBG)
+    }
+
+    preInitGraphics() {
+        if (!this.loadingBG) {
+            let loadingBG = new PIXI.Graphics();
+            loadingBG.beginFill(0x555555)
+            loadingBG.drawRect(0, 0, this.app.width, this.app.height)
+            loadingBG.endFill()
+            this.loadingBG = loadingBG
+        }
+    }
+
+
+    /**
      * シーン終了イベント
      * @param ctx
      */
     leaveSeaneEvent(ctx) {
-        this.removeAllEntities();
+        if (this.app[this.synonym]) {
+            detachApp()
+            this.app[this.synonym] = false
+        }
+    }
+
+    /**
+     * appから接続解除する際リソースを取り除く
+     */
+    detachApp() {
+        this.stage.removeChild(this.loadingBG)
+        this.removeAllEntities()
     }
 }
