@@ -14,6 +14,9 @@ GameSeaneのメモ
 | update     | 逐次updateイベント。1フレームごとにPlayer、Alianなどのエンティティごとに逐次updateが呼び出されている状態。 |
 | postUpdate | 事後updateイベント。1フレームごとにupdateを呼び出した後に呼び出される。 |
 | draw       | 描画イベント。 |
+| attach  | 初期化しAppに関連付けられたイベント |
+| detach  | Appから関連解除されたイベント |
+| readyResource  | リソースのロードが完了した |
 
 エンティティ固有イベント
 
@@ -31,7 +34,6 @@ GameSeaneのメモ
 | 設定値     | データ型   | 内容 |
 |------------|-----------|-----|
 | app        | App       | Appのインスタンス。    |
-| parent     | GameSeane | GameSeaneのインスタンス。 |
 | sender     | any       | イベントを発火したインスタンス。・・・とする規約。呼び出しAPIに指定したオブジェクトがそうなる。 |
 | data       | any       | イベント発火する際に任意で渡されたデータ。 |
 | input      | any       | (入力キー => キー入力状態ビット配列) の連想配列 |

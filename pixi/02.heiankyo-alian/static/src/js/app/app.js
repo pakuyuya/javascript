@@ -129,7 +129,7 @@ export default class {
      */
     removeEntity(entity) {
         // イベント
-        this.eventEmitter.fire('remove', entitry, this, {app: this})
+        this.eventEmitter.fire('detach', entitry, this, {app: this})
         this.eventEmitter.removeEntity(entity)
     }
 
@@ -163,7 +163,6 @@ export default class {
         return Primise.join(promises)
                 .success(() => {
                     self.fire('readyResource', entity, Object.assign(readyResourcesCtx, { app : app }))
-                    self.fire('readyEntity', self, {app : app, entity: entity})
                 })
     }
 
