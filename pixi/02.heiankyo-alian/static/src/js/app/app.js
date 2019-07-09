@@ -16,7 +16,7 @@ export default class {
     /**
      * コンストラクタ
      */
-    constructor(args = {}) {
+    constructor(args = { appendTo: document.body }) {
         this.uniqueId = common.uniqueId()
 
         let defaultOption = {
@@ -64,11 +64,12 @@ export default class {
         // 現在の描画シーン
         this.seane = null
 
-        // アプリケーション
-        this.app = new PIXI.Application({
+        // PIXIアプリケーション
+        this.pixiApp = new PIXI.Application({
             width: this.width,
             height: this.height
         })
+        args.appendTo.appendChild(this.pixiApp.view)
 
         // inputHandlerに追加
         this.attachEntity(this.inputHandler)
@@ -110,6 +111,7 @@ export default class {
             this.fireEach('update')
             this.fireEach('postUpdate')
             this.fireEach('draw')
+            this.pixiApp.render()
         }, ~~(1000/this.fps))
 
         this.switchSeane(new config.defaultSeane({app: this}))
