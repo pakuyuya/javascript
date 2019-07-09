@@ -1,16 +1,16 @@
+import common from './common'
+
 /**
  * イベントエミッター
  * という名のObserver
  */
-module.exports = class EventEmmitter {
+export default class EventEmmitter {
     /**
      * コンストラクタ
      */
     constructor(args) {
+        this.objid = common.uniqueId()
         this.fireWorks = {}
-        this.parent = parent
-        this.app    = app
-
         this.app = args.app
     }
 
@@ -24,7 +24,10 @@ module.exports = class EventEmmitter {
             const priority = events[event]
             let priorities = this.fireWorks[event] || []
             let entities = priorities[priority] || {}
-            entites[Symbol.for(entity)] = entity
+            if (!entity.uniqueId) {
+                entity.uniqueId = common.uniqueId()
+            }
+            entities[entity.uniqueId] = entity
             priorities[priority] = entities
             this.fireWorks[event] = priorities
         }
@@ -40,7 +43,7 @@ module.exports = class EventEmmitter {
             this.fireWorks[event] = this.fireWorks[event] || {}
             let priorities = this.fireWorks[event] || []
             let entities = priorities[priority] || {}
-            delete entites[Symbol.for(entity)]
+            delete entities[entity.uniqueId]
             // Note: prioritiesとeventは消えないけどボトルネックにはならんだろうなぁ
         }
     }
@@ -52,9 +55,14 @@ module.exports = class EventEmmitter {
      * @param data
      */
     fireEach(event, sender, data = {}) {
-        const entites = this.fireWorks[event] || {}
-        for (const entity of entites) {
-            this.fire(event, entity, sender, data)
+        const priorities = this.fireWorks[event] || []
+        for (const priority of priorities) {
+            for (const uniqueId in priority) {
+                if (common.isUniqueId(uniqueId)) {
+                    let entity = priority[uniqueId]
+                    this.fire(event, entity, sender, data)
+                }
+            }
         }
     }
 
@@ -70,8 +78,10 @@ module.exports = class EventEmmitter {
             sender : sender,
             data : data,
         }
-        if (entity.events[event]) {
-            (entity[event + 'Event'])(ctx)
+        if (!entity.events || entity.events[event]) {
+            if (entity[`${event}Event`]) {
+                (entity[`${event}Event`])(ctx)
+            }
         }
     }
 }

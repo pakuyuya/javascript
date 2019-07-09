@@ -1,4 +1,4 @@
-modules.exports = class InputHandler {
+export default class InputHandler {
     constructor() {
         this.prevKeys = {};
         this.keys = {};

@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
     urlPath(...paths) {
         let url = '';
         for (path of paths) {
@@ -11,5 +9,14 @@ module.exports = {
             }
         }
         return url;
+    },
+
+    uniqueId() {
+        return `appid${++_uniqueId}`
+    },
+
+    isUniqueId(test) {
+        return test.startsWith('appid')
     }
 }
+let _uniqueId = 0

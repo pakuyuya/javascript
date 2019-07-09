@@ -1,7 +1,10 @@
+import common from './common/common'
 import EventEmitter from './common/EventEmitter'
 import InputHandler from './common/InputHandler'
 import ResourceResolver from './common/ResourceResolver'
 import IntervalTimer from './common/IntervalTimer'
+
+import TitleSeane from './seane/title-seane'
 
 import * as PIXI from 'pixi.js'
 
@@ -14,6 +17,8 @@ export default class {
      * コンストラクタ
      */
     constructor(args = {}) {
+        this.uniqueId = common.uniqueId()
+
         let defaultOption = {
             width: 800,
             height: 600,
@@ -21,9 +26,6 @@ export default class {
 
         args = Object.assign(defaultOption, args)
         const self = this
-
-        // これなんだっけ
-        this.synonym = Symbol()
 
         // fps.
         this.fps = args.fps || 30
@@ -56,7 +58,7 @@ export default class {
         
         // 各コア機能
         this.eventEmitter     = new EventEmitter(initArgs)
-        this.inputHander      = new InputHandler(initArgs)
+        this.inputHandler      = new InputHandler(initArgs)
         this.resourceResolver = new ResourceResolver(initArgs)
 
         // 現在の描画シーン
@@ -72,7 +74,7 @@ export default class {
         this.attachEntity(this.inputHandler)
 
         // set events on window.
-        if (!document.body[this.synonym]) {
+        if (!document.body[this.uniqueId]) {
             document.body.addEventListener('keydown', (ev) => {
                 const key = ev.key.toLowerCase
                 if (self.keyboardMap[key]) {
@@ -85,7 +87,7 @@ export default class {
                     self.leftKey(self.keyboardMap[key])
                 }
             })
-            document.body[this.synonym] = true
+            document.body[this.uniqueId] = true
         }
 
     }
@@ -119,8 +121,8 @@ export default class {
      */
     attachEntity(entity) {
         this.eventEmitter.attachEntity(entity)
-        this.eventEmitter.fire('attach', entitry, this, {app: this})
-        this.loadEntityResources(entityInfo)
+        this.eventEmitter.fire('attach', entity, this, {app: this})
+        this.loadEntityResources(entity)
     }
 
     /**
@@ -129,7 +131,7 @@ export default class {
      */
     removeEntity(entity) {
         // イベント
-        this.eventEmitter.fire('detach', entitry, this, {app: this})
+        this.eventEmitter.fire('detach', entity, this, {app: this})
         this.eventEmitter.removeEntity(entity)
     }
 
@@ -160,9 +162,9 @@ export default class {
             promises.push(this.loadSounds(entity.sounds))
         }
 
-        return Primise.join(promises)
-                .success(() => {
-                    self.fire('readyResource', entity, Object.assign(readyResourcesCtx, { app : app }))
+        return Promise.all(promises)
+                .then(() => {
+                    this.fire('readyResource', entity, Object.assign(readyResourcesCtx, { app : this }))
                 })
     }
 
@@ -256,8 +258,10 @@ export default class {
             app : this,
         }
 
-        this.fire('leaveSeane', this.sean, opts)
-        this.removeEntity(this.seane)
+        if (this.seane) {
+            this.fire('leaveSeane', this.seane, opts)
+            this.removeEntity(this.seane)
+        }
         
         this.seane = newSeane
         this.attachEntity(newSeane)

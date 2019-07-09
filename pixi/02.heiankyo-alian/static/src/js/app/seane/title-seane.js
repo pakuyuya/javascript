@@ -1,15 +1,15 @@
-'use strict';
+import common from '../common/common'
 
 /**
  * シーンエンティティ
  */
-class TitleSeane {
+export default class TitleSeane {
     
     /**
      * コンストラクタ
      */
     constructor(args) {
-        this.synonym = Symbol()
+        this.uniqueId = common.uniqueId()
 
         this.entityName = 'TitleSeane';
 
@@ -105,9 +105,9 @@ class TitleSeane {
     enterSeaneEvent(ctx) {
         preInitGraphics()
 
-        if (!this.app[this.synonym]) {
+        if (!this.app[this.uniqueId]) {
             attachApp()
-            this.app[this.synonym] = true
+            this.app[this.uniqueId] = true
         }
     }
 
@@ -134,9 +134,9 @@ class TitleSeane {
      * @param ctx
      */
     leaveSeaneEvent(ctx) {
-        if (this.app[this.synonym]) {
+        if (this.app[this.uniqueId]) {
             detachApp()
-            this.app[this.synonym] = false
+            this.app[this.uniqueId] = false
         }
     }
 

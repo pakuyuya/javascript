@@ -1,5 +1,5 @@
 
-module.exports = class IntervalTimer {
+export default class IntervalTimer {
     constructor (handler, interval) {
         let self = this
         self.canceled = false
