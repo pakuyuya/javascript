@@ -6,5 +6,10 @@ module.exports = {
     output: {
         filename: 'bundle.js',
         path: path.join(__dirname, 'dist/js')
+    },
+    resolve: {
+        modules: [
+            "node_modules"
+        ]
     }
 }
