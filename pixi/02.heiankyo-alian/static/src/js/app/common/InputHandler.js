@@ -1,7 +1,9 @@
 export default class InputHandler {
     constructor() {
-        this.prevKeys = {};
-        this.keys = {};
+        this.prevKeys = {}
+        this.keys = {}
+
+        this.durations = {}
 
         this.envents = {
             'postUpdate' : 90
@@ -13,7 +15,7 @@ export default class InputHandler {
      * @param key
      */
     fire(key) {
-        this.keys[key] = true;
+        this.keys[key] = true
     }
 
     /**
@@ -21,7 +23,7 @@ export default class InputHandler {
      * @param key
      */
     push(key) {
-        this.keys[key] = true;
+        this.keys[key] = true
     }
 
     /**
@@ -29,7 +31,7 @@ export default class InputHandler {
      * @param key
      */
     left(key) {
-        delete this.keys[key];
+        delete this.keys[key]
     }
     
     /**
@@ -37,7 +39,8 @@ export default class InputHandler {
      * @param ctx コンテキスト
      */
     postUpdateEvent(ctx) {
-        this.prevKeys = this.keys;
+        this.prevKeys = Object.assign({}, this.keys)
+        this.updateDuration()
     }
 
     /**
@@ -45,7 +48,7 @@ export default class InputHandler {
      * @return キーの連想配列。入力があったキーのみtrueの配列で取得。
      */
     getFiredKeys() {
-        return Object.assign({}, this.keys);
+        return Object.assign({}, this.keys)
     }
 
     /**
@@ -53,13 +56,13 @@ export default class InputHandler {
      * @return キーの連想配列。入力があったキーのみtrueの配列で取得。
      */
     getJustPushedKeys() {
-        let keys = {};
+        let keys = {}
         for (const key in this.keys) {
             if (!this.prevKeys[key]) {
-                keys[key] = true;
+                keys[key] = true
             }
         }
-        return keys;
+        return keys
     }
 
     /**
@@ -67,12 +70,34 @@ export default class InputHandler {
      * @return キーの連想配列。入力があったキーのみtrueの配列で取得。
      */
     getJustLeftKeys() {
-        let keys = {};
+        let keys = {}
         for (const key in this.prevKeys) {
             if (!this.keys[key]) {
-                keys[key] = true;
+                keys[key] = true
             }
         }
-        return keys;
+        return keys
+    }
+
+    getDurations() {
+        return Object.assign({}, this.durations)
+    }
+
+    /**
+     * キー入力が続いている期間だけカウントアップする
+     */
+    updateDuration() {
+        for (const key in this.keys) {
+            if (!this.durations[key]) {
+                this.durations[key] = 1
+            } else {
+                ++(this.durations[key])
+            }
+        }
+        for (const key in this.durations) {
+            if (!this.keys[key]) {
+                delete this.durations[key]
+            }
+        }
     }
 }
