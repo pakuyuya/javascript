@@ -77,13 +77,13 @@ export default class {
         // set events on window.
         if (!document.body[this.uniqueId]) {
             document.body.addEventListener('keydown', (ev) => {
-                const key = ev.key.toLowerCase
+                const key = ev.key.toLowerCase()
                 if (self.keyboardMap[key]) {
                     self.pushKey(self.keyboardMap[key])
                 }
             })
             document.body.addEventListener('keyup', (ev) => {
-                const key = ev.key.toLowerCase
+                const key = ev.key.toLowerCase()
                 if (self.keyboardMap[key]) {
                     self.leftKey(self.keyboardMap[key])
                 }
@@ -198,7 +198,14 @@ export default class {
      * stageの参照を取得します。
      */
     getStage() {
-        return this.app.stage
+        return this.pixiApp.stage
+    }
+
+    /**
+     * InputHandlerの参照を取得します。
+     */
+    getInput() {
+        return this.inputHandler
     }
 
     /**
@@ -264,7 +271,7 @@ export default class {
             this.fire('leaveSeane', this.seane, opts)
             this.removeEntity(this.seane)
         }
-        
+
         this.seane = newSeane
         this.attachEntity(newSeane)
         this.fire('enterSeane', newSeane, opts)

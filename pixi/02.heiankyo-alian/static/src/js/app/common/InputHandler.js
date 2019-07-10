@@ -50,9 +50,17 @@ export default class InputHandler {
     getFiredKeys() {
         return Object.assign({}, this.keys)
     }
+    
+    /**
+     * 該当のキーが入力されているかを知る
+     * @return キーの連想配列。入力があったキーのみtrueの配列で取得。
+     */
+    isPushed(key) {
+        return this.keys[key] !== undefined
+    }
 
     /**
-     * 該当フレーム中で入力されたキーの配列を取得する。
+     * 該当フレーム中で入力されたキーのマップを取得する。
      * @return キーの連想配列。入力があったキーのみtrueの配列で取得。
      */
     getJustPushedKeys() {
@@ -66,8 +74,16 @@ export default class InputHandler {
     }
 
     /**
-     * 該当フレーム中で離されたキーの配列を取得する。
+     * 該当フレーム中で入力されたキーであるかを取得する。
      * @return キーの連想配列。入力があったキーのみtrueの配列で取得。
+     */
+    isJustPushed(key) {
+        return !this.prevKeys[key] && this.keys[key]
+    }
+
+    /**
+     * 該当フレーム中で離されたキーのマップを取得する。
+     * @return キーの連想配列。入力があったキーのみtrueのマップで取得。
      */
     getJustLeftKeys() {
         let keys = {}

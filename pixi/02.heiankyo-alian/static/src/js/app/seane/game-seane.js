@@ -18,6 +18,8 @@ class GameSeane {
             'postUpdate' : 50,
             'draw'       : 50,
             'readyResource' : 50,
+            'enterSeane' : 50,
+            'leaveSeane' : 50,
         }
 
         this.resources = {

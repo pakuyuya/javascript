@@ -1,5 +1,7 @@
 import common from '../common/common'
 
+import * as PIXI from 'pixi.js'
+
 /**
  * シーンエンティティ
  */
@@ -19,8 +21,9 @@ export default class TitleSeane {
             'postUpdate' : 50,
             'draw'       : 50,
             'readyResource' : 50,
+            'enterSeane' : 50,
+            'leaveSeane' : 50,
         }
-
 
         this.resources = {
             images : [],
@@ -28,7 +31,7 @@ export default class TitleSeane {
         }
 
         this.app = args.app
-        this.drawable = false
+        this.drawable = true
 
         this.entities = {}
     }
@@ -71,7 +74,9 @@ export default class TitleSeane {
      * @param ctx
      */
     updateEvent(ctx) {
-        // TODO:
+        if (this.app.getInput().isJustPushed('a')) {
+            console.log('pushed z')
+        }
     }
 
     /**
@@ -103,10 +108,10 @@ export default class TitleSeane {
      * @param ctx
      */
     enterSeaneEvent(ctx) {
-        preInitGraphics()
+        this.preInitGraphics()
 
         if (!this.app[this.uniqueId]) {
-            attachApp()
+            this.attachApp()
             this.app[this.uniqueId] = true
         }
     }
@@ -115,7 +120,9 @@ export default class TitleSeane {
      * appに接続しリソースを初期化する
      */
     attachApp() {
-        this.stage.addChild(this.loadingBG)
+        this.app.getStage().addChild(this.loadingBG)
+        this.app.getStage().addChild(this.pushstart)
+        this.app.getStage().addChild(this.titlelogo)
     }
 
     preInitGraphics() {
@@ -126,8 +133,19 @@ export default class TitleSeane {
             loadingBG.endFill()
             this.loadingBG = loadingBG
         }
+        if (!this.titlelogo) {
+            let titlelogo = new PIXI.Text('平安京エイリアン',{fontFamily : 'Arial', fontSize: 48, fill : 0xffffff, align : 'center'});
+            titlelogo.x = this.app.width / 2 - titlelogo.width / 2
+            titlelogo.y = this.app.height / 3 - titlelogo.height / 2
+            this.titlelogo = titlelogo
+        }
+        if (!this.pushstart) {
+            let pushstart = new PIXI.Text('push Z to start',{fontFamily : 'Arial', fontSize: 24, fill : 0xffffff, align : 'center'});
+            pushstart.x = this.app.width / 2 - pushstart.width / 2
+            pushstart.y = this.app.height * 2 / 3 - pushstart.height - 1
+            this.pushstart = pushstart
+        }
     }
-
 
     /**
      * シーン終了イベント
@@ -135,7 +153,7 @@ export default class TitleSeane {
      */
     leaveSeaneEvent(ctx) {
         if (this.app[this.uniqueId]) {
-            detachApp()
+            this.detachApp()
             this.app[this.uniqueId] = false
         }
     }
@@ -145,6 +163,8 @@ export default class TitleSeane {
      */
     detachApp() {
         this.stage.removeChild(this.loadingBG)
+        this.stage.removeChild(this.pushstart)
+        this.stage.removeChild(this.titlelogo)
         this.removeAllEntities()
     }
 }
