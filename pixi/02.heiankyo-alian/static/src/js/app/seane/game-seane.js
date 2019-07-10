@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * ゲーム実行中シーン
@@ -10,7 +10,7 @@ class GameSeane {
      * @param args 
      */
     constructor(args) {
-        this.entityName = 'GameSeane';
+        this.entityName = 'GameSeane'
 
         this.events = {
             'preUpdate'  : 50,
@@ -18,17 +18,17 @@ class GameSeane {
             'postUpdate' : 50,
             'draw'       : 50,
             'readyResource' : 50,
-        };
+        }
 
         this.resources = {
             images : [],
             sounds : [],
         }
 
-        this.drawable = false;
+        this.drawable = false
 
-        this.app = args.app;
-        this.switchSubSeane(OpeningSubSeane);
+        this.app = args.app
+        this.switchSubSeane(OpeningSubSeane)
     }
 
     /**
@@ -76,8 +76,8 @@ class GameSeane {
      * @param newSeane 新しいシーン
      */
     switchSubSeane(newSeane) {
-        this.app.removeEntity(this.seane);
-        this.app.ttachEntity(this.seane);
-        this.subSeane = newSeane;
+        this.app.removeEntity(this.seane)
+        this.app.ttachEntity(this.seane)
+        this.subSeane = newSeane
     }
 }

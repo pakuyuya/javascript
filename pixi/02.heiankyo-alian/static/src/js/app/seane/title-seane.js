@@ -11,7 +11,7 @@ export default class TitleSeane {
     constructor(args) {
         this.uniqueId = common.uniqueId()
 
-        this.entityName = 'TitleSeane';
+        this.entityName = 'TitleSeane'
 
         this.events = {
             'preUpdate'  : 50,
@@ -19,7 +19,7 @@ export default class TitleSeane {
             'postUpdate' : 50,
             'draw'       : 50,
             'readyResource' : 50,
-        };
+        }
 
 
         this.resources = {
@@ -27,34 +27,34 @@ export default class TitleSeane {
             sounds : [],
         }
 
-        this.app = args.app;
-        this.drawable = false;
+        this.app = args.app
+        this.drawable = false
 
-        this.entities = {};
+        this.entities = {}
     }
 
     /**
      * エンティティをAttachする
      */
     attachEntity(entity) {
-        const key = Symbol();
-        entity['$$hk' + this.entityName] = key;
-        this.entities[key] = entity;
+        const key = Symbol()
+        entity['$$hk' + this.entityName] = key
+        this.entities[key] = entity
 
-        this.app.attachEntity(entity);
+        this.app.attachEntity(entity)
     }
 
     removeEntity(entity) {
-        const key = entity['$$hk' + this.entityName];
+        const key = entity['$$hk' + this.entityName]
         if (key) {
-            delete this.entities[key];
+            delete this.entities[key]
         }
-        this.app.detachEntity(entity);
+        this.app.detachEntity(entity)
     }
 
     removeAllEntities() {
         for (const entity of this.entities) {
-            removeEntity(entity);
+            removeEntity(entity)
         }
     }
 
@@ -120,7 +120,7 @@ export default class TitleSeane {
 
     preInitGraphics() {
         if (!this.loadingBG) {
-            let loadingBG = new PIXI.Graphics();
+            let loadingBG = new PIXI.Graphics()
             loadingBG.beginFill(0x555555)
             loadingBG.drawRect(0, 0, this.app.width, this.app.height)
             loadingBG.endFill()

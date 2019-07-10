@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * プレイ中サブシーン
@@ -9,7 +9,7 @@ class PlayingSubSeane {
      * コンストラクタ
      */
     constructor(args) {
-        this.entityName = 'PlayingSubSeane';
+        this.entityName = 'PlayingSubSeane'
 
         this.events = {
             'preUpdate'  : 50,
@@ -17,15 +17,15 @@ class PlayingSubSeane {
             'postUpdate' : 50,
             'draw'       : 50,
             'readyResource' : 50,
-        };
+        }
 
         this.resources = {
             images : [],
             sounds : [],
         }
 
-        this.app = args.app;
-        this.drawable = false;
+        this.app = args.app
+        this.drawable = false
     }
 
     /**

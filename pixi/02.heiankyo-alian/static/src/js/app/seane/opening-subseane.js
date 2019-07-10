@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * オープニングデモ用サブシーン
@@ -9,7 +9,7 @@ class OpneningSubSeane {
      * コンストラクタ
      */
     constructor(args) {
-        this.entityName = 'OpneningSubSeane';
+        this.entityName = 'OpneningSubSeane'
 
         this.events = {
             'preUpdate'  : 50,
@@ -17,15 +17,15 @@ class OpneningSubSeane {
             'postUpdate' : 50,
             'draw'       : 50,
             'readyResource' : 50,
-        };
+        }
 
         this.resources = {
             images : [],
             sounds : [],
         }
 
-        this.app = args.app;
-        this.drawable = false;
+        this.app = args.app
+        this.drawable = false
     }
 
     /**

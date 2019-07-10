@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * ゲームオーバー用サブシーン
@@ -9,7 +9,7 @@ class GameOverSubSeane {
      * コンストラクタ
      */
     constructor(args) {
-        this.entityName = 'GameOverSubSeane';
+        this.entityName = 'GameOverSubSeane'
 
         this.events = {
             'preUpdate'  : 50,
@@ -17,15 +17,15 @@ class GameOverSubSeane {
             'postUpdate' : 50,
             'draw'       : 50,
             'readyResource' : 50,
-        };
+        }
 
         this.resources = {
             images : [],
             sounds : [],
         }
 
-        this.app = args.app;
-        this.drawable = false;
+        this.app = args.app
+        this.drawable = false
     }
 
     /**

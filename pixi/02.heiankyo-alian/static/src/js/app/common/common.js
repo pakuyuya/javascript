@@ -1,14 +1,14 @@
 export default {
     urlPath(...paths) {
-        let url = '';
+        let url = ''
         for (path of paths) {
             if (path.endsWith('/')) {
-                url += url;
+                url += url
             } else {
-                url += '/' + path;
+                url += '/' + path
             }
         }
-        return url;
+        return url
     },
 
     uniqueId() {

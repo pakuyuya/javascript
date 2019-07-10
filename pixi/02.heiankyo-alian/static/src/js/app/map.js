@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * マップ
@@ -9,7 +9,7 @@ class Map {
      * コンストラクタ
      */
     constructor(args) {
-        this.entityName = 'Map';
+        this.entityName = 'Map'
 
         this.events = {
             'preUpdate'  : 50,
@@ -17,15 +17,15 @@ class Map {
             'postUpdate' : 50,
             'draw'       : 50,
             'readyResource' : 50,
-        };
+        }
 
         this.resources = {
             images : [],
             sounds : [],
         }
 
-        this.app = args.app;
-        this.drawable = false;
+        this.app = args.app
+        this.drawable = false
     }
 
     /**

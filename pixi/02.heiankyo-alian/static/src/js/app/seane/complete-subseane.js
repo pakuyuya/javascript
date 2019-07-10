@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * 面クリア用サブシーン
@@ -9,7 +9,7 @@ class CompleteSubSeane {
      * コンストラクタ
      */
     constructor(args) {
-        this.entityName = 'CompleteSubSeane';
+        this.entityName = 'CompleteSubSeane'
 
         this.events = {
             'preUpdate'  : 50,
@@ -17,15 +17,15 @@ class CompleteSubSeane {
             'postUpdate' : 50,
             'draw'       : 50,
             'readyResource' : 50,
-        };
+        }
 
         this.resources = {
             images : [],
             sounds : [],
         }
 
-        this.app = args.app;
-        this.drawable = false;
+        this.app = args.app
+        this.drawable = false
     }
 
     /**

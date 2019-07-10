@@ -9,8 +9,8 @@ export default class ResourceResolver {
      * コンストラクタ
      */
     constructor(args) {
-        this.baseurl = args.baseurl;
-        this.cacheSnd = {};
+        this.baseurl = args.baseurl
+        this.cacheSnd = {}
     }
 
     /**
@@ -20,17 +20,17 @@ export default class ResourceResolver {
      * @return Promise(PIXI.Texture)
      */
     resolveImages(resources, opt) {
-//        opt = Object.assign({}, opt);
+//        opt = Object.assign({}, opt)
         return new Promise((resolve, reject)=> {
             PIXI.loader
                 .add(resources)
                 .setup(() => {
                     const images = resources.map((resource, index, ary) => {
                         ary[resource] = PIXI.loader.resources[common.urlPath(this.baseurl, resource)].texture
-                    });
-                    resolve(images);
-                });
-        });
+                    })
+                    resolve(images)
+                })
+        })
     }
 
     /**
@@ -42,12 +42,12 @@ export default class ResourceResolver {
     resolveSounds(resources, opt) {
         let promises = resorces.map((resource, index, ary) => {
             ary[resource] = new Promise((resolve, reject) => {
-                const param = Object.assign({}, opt);
-                ret.src = [common.urlPath(args.baseurl, resource)];
-                resolve(new Howl(param));
-            });
-        });
+                const param = Object.assign({}, opt)
+                ret.src = [common.urlPath(args.baseurl, resource)]
+                resolve(new Howl(param))
+            })
+        })
         
-        return Promise.join(promises);
+        return Promise.join(promises)
     }
 }
