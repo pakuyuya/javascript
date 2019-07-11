@@ -1,18 +1,13 @@
 'use strict'
 
-import OpeningSubSeane from './opening-subseane'
-
-/**
- * ゲーム実行中シーン
- */
-export default class GameSeane {
+export default class LoadingSubSeane {
     
     /**
      * コンストラクタ
-     * @param args 
      */
     constructor(args) {
-        this.entityName = 'GameSeane'
+        this.nextSeane = args.seane
+        this.entityName = 'LoadingSeane'
 
         this.events = {
             'preUpdate'  : 50,
@@ -29,10 +24,13 @@ export default class GameSeane {
             sounds : [],
         }
 
-        this.drawable = false
-
         this.app = args.app
-        this.switchSubSeane(OpeningSubSeane)
+        this.perProgress = 0
+        // TODO: impliment loading
+    }
+
+    updateProgress() {
+        // TODO: 
     }
 
     /**
@@ -48,7 +46,11 @@ export default class GameSeane {
      * @param ctx
      */
     updateEvent(ctx) {
-        // TODO:
+        this.updateProgress()
+
+        if (this.perProgress >= 100) {
+            this.app.switchSeane(this.nextSeane)
+        }
     }
 
     /**
@@ -72,18 +74,5 @@ export default class GameSeane {
      */
     readyResourceEvent(ctx) {
         // TODO:
-    }
-
-    /**
-     * サブシーンを切り替えます。
-     * 
-     * @param newSeane 新しいシーン
-     */
-    switchSubSeane(newSeane) {
-        if (this.seane) {
-            this.app.removeEntity(this.seane)
-        }
-        this.app.attachEntity(newSeane)
-        this.subSeane = newSeane
     }
 }

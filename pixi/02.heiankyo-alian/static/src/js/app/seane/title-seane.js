@@ -1,4 +1,6 @@
 import common from '../common/common'
+import LoadingSeane from './loading-seane'
+import GameSeane from './game-seane'
 
 import * as PIXI from 'pixi.js'
 
@@ -56,8 +58,8 @@ export default class TitleSeane {
     }
 
     removeAllEntities() {
-        for (const entity of this.entities) {
-            removeEntity(entity)
+        for (const key in this.entities) {
+            removeEntity(this.entities[key])
         }
     }
 
@@ -75,7 +77,10 @@ export default class TitleSeane {
      */
     updateEvent(ctx) {
         if (this.app.getInput().isJustPushed('a')) {
-            console.log('pushed z')
+            this.app.switchSeane(new LoadingSeane({
+                app: this.app,
+                seane: new GameSeane({app: this.app})
+            }))
         }
     }
 
@@ -162,9 +167,9 @@ export default class TitleSeane {
      * appから接続解除する際リソースを取り除く
      */
     detachApp() {
-        this.stage.removeChild(this.loadingBG)
-        this.stage.removeChild(this.pushstart)
-        this.stage.removeChild(this.titlelogo)
+        this.app.getStage().removeChild(this.loadingBG)
+        this.app.getStage().removeChild(this.pushstart)
+        this.app.getStage().removeChild(this.titlelogo)
         this.removeAllEntities()
     }
 }

@@ -134,7 +134,7 @@ export default class {
     removeEntity(entity) {
         // イベント
         this.eventEmitter.fire('detach', entity, this, {app: this})
-        this.eventEmitter.removeEntity(entity)
+        this.eventEmitter.detachEntity(entity)
     }
 
     /**
@@ -161,7 +161,7 @@ export default class {
                     .success((sounds) => {
                         readyResourcesCtx.data.sounds = sounds
                     })
-            promises.push(this.loadSounds(entity.sounds))
+            promises.push(promise)
         }
 
         return Promise.all(promises)

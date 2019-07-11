@@ -39,7 +39,8 @@ export default class EventEmmitter {
      * @param events このデフォルト引数きもすぎ
      */
     detachEntity(entity, events = entity.events || {}) {
-        for (const event of events) {
+        for (const event in events) {
+            let priority = events[event]
             this.fireWorks[event] = this.fireWorks[event] || {}
             let priorities = this.fireWorks[event] || []
             let entities = priorities[priority] || {}
