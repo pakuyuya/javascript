@@ -19,18 +19,69 @@ export default class LoadingSubSeane {
             'leaveSeane' : 50,
         }
 
-        this.resources = {
-            images : [],
-            sounds : [],
-        }
-
         this.app = args.app
         this.perProgress = 0
-        // TODO: impliment loading
+
+        this.countRequired = 0
+        this.countReady = 0
+
+        this.loadEntityResources(this.nextSeane)
+
+        if (this.nextSeane.entities) {
+            for (let entity of this.nextSeane.entities) {
+                this.loadEntityResources(entity)
+            }
+        }
+    }
+
+    /**
+     * 対象のEntityのリソースを読み込みます。
+     * 読み込み後、EntityにresourceReadyイベント、AppにentityReadyイベントを通知します。
+     * @param entity 対象のEntity
+     * @return Promise
+     */
+    loadEntityResources(entity) {
+        if (!entity || !entity.resources) {
+            return
+        }
+
+        let readyResourcesCtx = {data : {} }
+        let promises = []
+        let owners = [entity, this]
+        if (entity.images) {
+            let promise = 
+                this.app.loadImages(entity.images, owners)
+                    .then((images) => {
+                        readyResourcesCtx.data.images = images
+                        this.countReady += images.length
+                    })
+            promises.push(promise)
+        }
+
+        if (entity.sounds) {
+            let promise = 
+                this.app.loadSounds(entity.sounds, owners)
+                    .then((sounds) => {
+                        readyResourcesCtx.data.sounds = sounds
+                        this.countReady += sounds.length
+                    })
+            promises.push(promise)
+        }
+
+        this.countRequired += promises.length
+
+        return Promise.all(promises)
+                .then(() => {
+                    this.app.fire('readyResource', entity, Object.assign(readyResourcesCtx, { app : this }))
+                })
     }
 
     updateProgress() {
-        // TODO: 
+        if (!this.countRequired) {
+            this.perProgress = 100
+        } else {
+            this.perProgress = ~~(this.countReady / this.countRequired * 100)
+        }
     }
 
     /**

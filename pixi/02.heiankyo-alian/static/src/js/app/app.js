@@ -124,7 +124,6 @@ export default class {
     attachEntity(entity) {
         this.eventEmitter.attachEntity(entity)
         this.eventEmitter.fire('attach', entity, this, {app: this})
-        this.loadEntityResources(entity)
     }
 
     /**
@@ -138,48 +137,21 @@ export default class {
     }
 
     /**
-     * 対象のEntityのリソースを読み込みます。
-     * 読み込み後、EntityにresourceReadyイベント、AppにentityReadyイベントを通知します。
-     * @param entity 対象のEntity
-     * @return Promise
-     */
-    loadEntityResources(entity) {
-        let readyResourcesCtx = {data : {} }
-        let promises = []
-        if (entity.images) {
-            let promise = 
-                this.loadImages(entity.images)
-                    .success((images) => {
-                        readyResourcesCtx.data.images = images
-                    })
-            promises.push(promise)
-        }
-
-        if (entity.sounds) {
-            let promise = 
-                this.loadSounds(entity.sounds)
-                    .success((sounds) => {
-                        readyResourcesCtx.data.sounds = sounds
-                    })
-            promises.push(promise)
-        }
-
-        return Promise.all(promises)
-                .then(() => {
-                    this.fire('readyResource', entity, Object.assign(readyResourcesCtx, { app : this }))
-                })
-    }
-
-    /**
      * 画像リソースを読み込みます。
      * @param urls URLの配列
      * @param owner  readyResourceEvent の発火の形でコールバックを受けるオブジェクト
      * @return Promise<Array<PIXI.texture>>
      */
     loadTextures(urls, owner) {
+        let owners = Array.isArray(owner) ? owner : [owner]
         return this.resourceResolver
                     .resolveImages(urls)
-                    .then((textures) => textures)
+                    .then((textures) => {
+                        owners.forEach(owner => {
+                            this.fire('readyResource', owner, { data: textures })
+                        })
+                        return textures
+                    })
     }
 
     /**
@@ -188,10 +160,16 @@ export default class {
      * @param owner  readyResourceEvent の発火の形でコールバックを受けるオブジェクト
      * @return Promise<Array<Hawl>>
      */
-    loadSounds(urls) {
+    loadSounds(urls, owner) {
+        let owners = Array.isArray(owner) ? owner : [owner]
         return this.resourceResolver
                     .resolveSounds(urls)
-                    .then((sounds) => sounds)
+                    .then((sounds) => {
+                        owners.forEach(owner => {
+                            this.fire('readyResource', owner, { data: sounds })
+                        })
+                        return sounds
+                    })
     }
 
     /**
