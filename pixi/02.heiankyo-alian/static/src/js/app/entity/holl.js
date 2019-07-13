@@ -3,7 +3,7 @@
 /**
  * 穴エンティティ
  */
-class Holl {
+export default class Holl {
     /**
      * コンストラクタ
      */
@@ -19,7 +19,13 @@ class Holl {
             'escapeEntity'  : 50,
             'digHoll'       : 50,
             'fillHoll'      : 50,
-        };
+        }
+
+        this.collisions = [
+            'alian',
+            'player',
+            'digHoll'
+        ]
 
         this.resources = {
             images : [],
@@ -86,4 +92,8 @@ class Holl {
         // TODO:
     }
 
+    static resources = {
+        images : [],
+        sounds : [],
+    }
 }

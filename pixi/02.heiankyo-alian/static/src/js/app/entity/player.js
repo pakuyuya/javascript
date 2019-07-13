@@ -3,7 +3,7 @@
 /**
  * プレイヤーエンティティ
  */
-class Player {
+export default class Player {
     /**
      * コンストラクタ
      */
@@ -18,6 +18,11 @@ class Player {
             'damage'     : 50,
             'readyResource' : 50,
         };
+
+        this.collisions = [
+            'holl',
+            'alian'
+        ]
 
         this.resources = {
             images : [],
@@ -72,6 +77,11 @@ class Player {
      */
     damageEvent(ctx) {
         // TODO:
+    }
+
+    static resources = {
+        images : [],
+        sounds : [],
     }
 
 }

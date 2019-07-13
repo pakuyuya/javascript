@@ -3,7 +3,7 @@
 /**
  * エイリアンエンティティ
  */
-class Alian {
+export default class Alian {
     
     constructor(args) {
         this.entityName = 'Alian';
@@ -17,6 +17,11 @@ class Alian {
             'closeHoll'     : 50,
             'readyResource' : 50,
         };
+
+        this.collisions = [
+            'holl',
+            'player'
+        ]
 
         this.resources = {
             images : [],
@@ -112,5 +117,10 @@ class Alian {
      */
     drawEvent(ctx) {
         // TODO:
+    }
+
+    static resources = {
+        images : [],
+        sounds : [],
     }
 }

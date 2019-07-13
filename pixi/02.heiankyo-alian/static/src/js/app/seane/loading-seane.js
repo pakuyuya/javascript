@@ -27,9 +27,9 @@ export default class LoadingSubSeane {
 
         this.loadEntityResources(this.nextSeane)
 
-        if (this.nextSeane.entities) {
-            for (let entity of this.nextSeane.entities) {
-                this.loadEntityResources(entity)
+        if (this.nextSeane.entityTemplates) {
+            for (let name in this.nextSeane.entityTemplates) {
+                this.loadEntityResources(this.nextSeane.entityTemplates[name])
             }
         }
     }

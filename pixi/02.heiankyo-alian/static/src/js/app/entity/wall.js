@@ -1,23 +1,27 @@
-'use strict'
+'use strict';
 
 /**
- * オープニングデモ用サブシーン
+ * 壁エンティティ
  */
-class OpneningSubSeane {
-    
+export default class Wall {
     /**
      * コンストラクタ
      */
     constructor(args) {
-        this.entityName = 'OpneningSubSeane'
+        this.entityName = 'Player'
 
         this.events = {
             'preUpdate'  : 50,
             'update'     : 50,
             'postUpdate' : 50,
             'draw'       : 50,
+            'damage'     : 50,
             'readyResource' : 50,
         }
+
+        this.collisions = [
+            'move',
+        ]
 
         this.resources = {
             images : [],
@@ -25,7 +29,6 @@ class OpneningSubSeane {
         }
 
         this.app = args.app
-        this.parentSeane = args.parentSeane
         this.drawable = false
     }
 
@@ -66,5 +69,17 @@ class OpneningSubSeane {
      */
     readyResourceEvent(ctx) {
         // TODO:
+    }
+    
+    /**
+     * 攻撃受けたイベント
+     */
+    damageEvent(ctx) {
+        // TODO:
+    }
+
+    static resources = {
+        images : [],
+        sounds : [],
     }
 }

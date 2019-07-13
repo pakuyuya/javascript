@@ -1,6 +1,10 @@
 'use strict'
 
 import OpeningSubSeane from './game-subseanes/opening-subseane'
+import Map from '../entity/map'
+import Player from '../entity/player'
+import Alian from '../entity/alian'
+import Holl from '../entity/holl'
 
 /**
  * ゲーム実行中シーン
@@ -27,6 +31,10 @@ export default class GameSeane {
         this.resources = {
             images : [],
             sounds : [],
+        }
+
+        this.entityTemplates = {
+            Map, Player, Alian, Holl
         }
 
         this.drawable = false

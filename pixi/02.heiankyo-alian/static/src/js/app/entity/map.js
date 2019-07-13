@@ -3,7 +3,7 @@
 /**
  * マップ
  */
-class Map {
+export default class Map {
 
     /**
      * コンストラクタ
@@ -19,10 +19,7 @@ class Map {
             'readyResource' : 50,
         }
 
-        this.resources = {
-            images : [],
-            sounds : [],
-        }
+        this.maps = undefined
 
         this.app = args.app
         this.drawable = false
@@ -65,5 +62,10 @@ class Map {
      */
     readyResourceEvent(ctx) {
         // TODO:
+    }
+    
+    static resources = {
+        images : [],
+        sounds : [],
     }
 }
