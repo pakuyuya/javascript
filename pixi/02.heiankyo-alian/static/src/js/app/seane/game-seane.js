@@ -1,6 +1,6 @@
 'use strict'
 
-import OpeningSubSeane from './opening-subseane'
+import OpeningSubSeane from './game-subseanes/opening-subseane'
 
 /**
  * ゲーム実行中シーン
@@ -79,11 +79,16 @@ export default class GameSeane {
      * 
      * @param newSeane 新しいシーン
      */
-    switchSubSeane(newSeane) {
-        if (this.seane) {
-            this.app.removeEntity(this.seane)
+    switchSubSeane(newSeaneClass) {
+        if (this.subSeane) {
+            this.app.removeEntity(this.subSeane)
         }
-        this.app.attachEntity(newSeane)
-        this.subSeane = newSeane
+        let newSubSeane = new newSeaneClass({
+            app: this.app,
+            parentSeane: this
+        });
+
+        this.app.attachEntity(newSubSeane)
+        this.subSeane = newSubSeane
     }
 }
