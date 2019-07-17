@@ -83,6 +83,43 @@ export default class GameSeane {
     }
 
     /**
+     * シーン開始イベント
+     * @param ctx
+     */
+    enterSeaneEvent(ctx) {
+        if (!this.app[this.uniqueId]) {
+            this.attachApp()
+            this.app[this.uniqueId] = true
+        }
+        if (this.subSeane) {
+            this.app.fire('enterSeane', this.subSeane)
+        }
+    }
+
+    
+    attachApp() {
+        // TODO: 
+    }
+
+    /**
+     * シーン終了イベント
+     * @param ctx
+     */
+    leaveSeaneEvent(ctx) {
+        if (this.subSeane) {
+            this.app.fire('leaveSeane', this.subSeane)
+        }
+        if (this.app[this.uniqueId]) {
+            this.detachApp()
+            this.app[this.uniqueId] = false
+        }
+    }
+
+    detachApp() {
+        // TODO: 
+    }
+
+    /**
      * サブシーンを切り替えます。
      * 
      * @param newSeane 新しいシーン
@@ -98,5 +135,6 @@ export default class GameSeane {
 
         this.app.attachEntity(newSubSeane)
         this.subSeane = newSubSeane
+        this.app.fire('enterSeane', this.subSeane)
     }
 }
