@@ -3,7 +3,7 @@
 /**
  * オープニングデモ用サブシーン
  */
-class OpneningSubSeane {
+export default class OpneningSubSeane {
     
     /**
      * コンストラクタ
@@ -17,11 +17,6 @@ class OpneningSubSeane {
             'postUpdate' : 50,
             'draw'       : 50,
             'readyResource' : 50,
-        }
-
-        this.resources = {
-            images : [],
-            sounds : [],
         }
 
         this.app = args.app

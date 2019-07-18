@@ -4,6 +4,11 @@
  * 穴エンティティ
  */
 export default class Holl {
+
+    static resources () {
+        return { images : [] }
+    }
+
     /**
      * コンストラクタ
      */
@@ -90,10 +95,5 @@ export default class Holl {
      */
     fillHollEvent(ctx) {
         // TODO:
-    }
-
-    static resources = {
-        images : [],
-        sounds : [],
     }
 }

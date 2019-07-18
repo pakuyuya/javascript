@@ -4,6 +4,14 @@
  * プレイヤーエンティティ
  */
 export default class Player {
+    
+    static resources () {
+        return {
+            images : [],
+            sounds : []
+        }
+    }
+
     /**
      * コンストラクタ
      */
@@ -78,10 +86,4 @@ export default class Player {
     damageEvent(ctx) {
         // TODO:
     }
-
-    static resources = {
-        images : [],
-        sounds : [],
-    }
-
 }

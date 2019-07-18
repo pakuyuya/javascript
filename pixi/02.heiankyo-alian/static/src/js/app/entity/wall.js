@@ -4,6 +4,13 @@
  * 壁エンティティ
  */
 export default class Wall {
+    static resources () {
+        return {
+            images : [],
+            sounds : []
+        }
+    }
+
     /**
      * コンストラクタ
      */
@@ -76,10 +83,5 @@ export default class Wall {
      */
     damageEvent(ctx) {
         // TODO:
-    }
-
-    static resources = {
-        images : [],
-        sounds : [],
     }
 }

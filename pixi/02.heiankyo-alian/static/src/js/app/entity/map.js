@@ -1,14 +1,24 @@
 'use strict'
 
+import Wall from '../entity/wall'
+
 /**
  * マップ
  */
 export default class Map {
 
+    static dependentEntities () {
+        return { Wall }
+    }
+    static resources () {
+        return { images : [] }
+    }
+
     /**
      * コンストラクタ
      */
     constructor(args) {
+        this.uniqueId = common.uniqueId()
         this.entityName = 'Map'
 
         this.events = {
@@ -28,6 +38,7 @@ export default class Map {
 
         this.blockTable = undefined
         this.collisionSetMap = {}
+        this.blockEntities = []
 
         this.app = args.app
         this.drawable = false
@@ -102,7 +113,7 @@ export default class Map {
             wallNum++
         }
         
-        let wallNum = 0
+        wallNum = 0
         while (wallNum < col_randwallnum) {
             let rand_r = ~~(Math.random() * ~~((this.rowBlockSize - 3) / 3))
             let rand_c = ~~(Math.random() * ~~((this.colBlockSize - 6) / 3))
@@ -149,6 +160,12 @@ export default class Map {
         }
 
         this.blockTable = blockTable
+    }
+
+    syncEntities () {
+        for (let blockEntity of this.blockEntities) {
+            this.app.detachEntity(blockEntity)
+        }
     }
 
     /**
@@ -221,10 +238,5 @@ export default class Map {
      */
     readyResourceEvent(ctx) {
         // TODO:
-    }
-    
-    static resources = {
-        images : [],
-        sounds : [],
     }
 }

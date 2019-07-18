@@ -4,7 +4,13 @@
  * エイリアンエンティティ
  */
 export default class Alian {
-    
+    static resources () {
+        return {
+            images : [],
+            sounds : []
+        }
+    }
+
     constructor(args) {
         this.entityName = 'Alian';
 
@@ -117,10 +123,5 @@ export default class Alian {
      */
     drawEvent(ctx) {
         // TODO:
-    }
-
-    static resources = {
-        images : [],
-        sounds : [],
     }
 }

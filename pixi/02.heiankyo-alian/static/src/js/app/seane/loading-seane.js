@@ -25,13 +25,21 @@ export default class LoadingSubSeane {
         this.countRequired = 0
         this.countReady = 0
 
-        this.loadEntityResources(this.nextSeane)
-
-        if (this.nextSeane.entityTemplates) {
-            for (let name in this.nextSeane.entityTemplates) {
-                this.loadEntityResources(this.nextSeane.entityTemplates[name])
+        let fnAppendLoadingRecursive = (target) => {
+            if (!target)
+                return
+            
+            this.appendLoading(target)
+            if (this.nextSeane.prototype.dependentEntities) {
+                let dependentEntities = this.nextSeane.prototype.dependentEntities
+                for (let name in dependentEntities) {
+                    let entityClass = dependentEntities[name]
+                    fnAppendLoadingRecursive(entityClass)
+                }
             }
         }
+
+        fnAppendLoadingRecursive(this.nextSeane.prototype)
     }
 
     /**
@@ -40,17 +48,19 @@ export default class LoadingSubSeane {
      * @param entity 対象のEntity
      * @return Promise
      */
-    loadEntityResources(entity) {
-        if (!entity || !entity.resources) {
+    appendLoading(entityClass) {
+        if (!entityClass || !entityClass.resources) {
             return
         }
+
+        let resources = entityClass.resources()
 
         let readyResourcesCtx = {data : {} }
         let promises = []
         let owners = [entity, this]
-        if (entity.images) {
+        if (resources.images) {
             let promise = 
-                this.app.loadImages(entity.images, owners)
+                this.app.loadImages(resources.images, owners)
                     .then((images) => {
                         readyResourcesCtx.data.images = images
                         this.countReady += images.length
@@ -58,9 +68,9 @@ export default class LoadingSubSeane {
             promises.push(promise)
         }
 
-        if (entity.sounds) {
+        if (resources.sounds) {
             let promise = 
-                this.app.loadSounds(entity.sounds, owners)
+                this.app.loadSounds(resources.sounds, owners)
                     .then((sounds) => {
                         readyResourcesCtx.data.sounds = sounds
                         this.countReady += sounds.length

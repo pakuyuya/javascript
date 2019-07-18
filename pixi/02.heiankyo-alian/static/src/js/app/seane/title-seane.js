@@ -9,6 +9,13 @@ import * as PIXI from 'pixi.js'
  */
 export default class TitleSeane {
     
+    static dependentEntities () {
+        return {}
+    }
+    static resources () {
+        return { images : [] }
+    }
+
     /**
      * コンストラクタ
      */
@@ -25,11 +32,6 @@ export default class TitleSeane {
             'readyResource' : 50,
             'enterSeane' : 50,
             'leaveSeane' : 50,
-        }
-
-        this.resources = {
-            images : [],
-            sounds : [],
         }
 
         this.app = args.app

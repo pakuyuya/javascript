@@ -10,7 +10,13 @@ import Holl from '../entity/holl'
  * ゲーム実行中シーン
  */
 export default class GameSeane {
-    
+    static dependentEntities () {
+        return { Map, Player, Alian, Holl }
+    }
+    static resources () {
+        return { images : [] }
+    }
+
     /**
      * コンストラクタ
      * @param args 
@@ -33,15 +39,13 @@ export default class GameSeane {
             sounds : [],
         }
 
-        this.entityTemplates = {
-            Map, Player, Alian, Holl
-        }
 
         this.drawable = false
 
         this.app = args.app
         this.switchSubSeane(OpeningSubSeane)
     }
+    
 
     /**
      * 事前updateイベント
