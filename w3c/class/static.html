@@ -1,0 +1,15 @@
+<html>
+    <head>
+    </head>
+    <body>
+
+    </body>
+    <script>
+        class C {
+            static static_method() { return 'yap' }
+        }
+
+        console.log(C.static_method)
+        console.log(new C().static_method) // undifined
+    </script>
+</html>
