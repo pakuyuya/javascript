@@ -7,9 +7,15 @@
     <script>
         class C {
             static static_method() { return 'yap' }
+            static static_var = 'a'
         }
 
         console.log(C.static_method)
         console.log(new C().static_method) // undifined
-    </script>
+
+
+        console.log(C.static_var)
+        console.log(new C().static_var) // undifined
+
+</script>
 </html>
