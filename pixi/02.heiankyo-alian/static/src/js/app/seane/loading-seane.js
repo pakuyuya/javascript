@@ -1,5 +1,7 @@
 'use strict'
 
+import * as PIXI from 'pixi.js'
+
 export default class LoadingSubSeane {
     
     /**
@@ -38,7 +40,6 @@ export default class LoadingSubSeane {
                 }
             }
         }
-
         fnAppendLoadingRecursive(this.nextSeane.prototype)
     }
 
@@ -135,5 +136,24 @@ export default class LoadingSubSeane {
      */
     readyResourceEvent(ctx) {
         // TODO:
+    }
+
+    enterSeaneEvent(ctx) {
+        this.preInitGraphics()
+
+        this.app.getStage().addChild(this.loadingText)
+    }
+    
+    preInitGraphics() {
+        if (!this.loadingText) {
+            let loadingText = new PIXI.Text('Now Loading...',{fontFamily : 'Arial', fontSize: 24, fill : 0xffffff, align : 'center'});
+            loadingText.x = ~~(this.app.width - loadingText.width - 20)
+            loadingText.y = ~~(this.app.height - loadingText.height  - 20)
+            this.loadingText = loadingText
+        }
+    }
+
+    leaveSeaneEvent(ctx) {
+        this.app.getStage().removeChild(this.loadingText)
     }
 }
