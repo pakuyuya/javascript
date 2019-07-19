@@ -43,6 +43,7 @@ export default class GameSeane {
         this.drawable = false
 
         this.app = args.app
+        this.map = new Map({app: this.map, parent: this})
         this.switchSubSeane(OpeningSubSeane)
     }
     
@@ -102,7 +103,7 @@ export default class GameSeane {
 
     
     attachApp() {
-        // TODO: 
+        this.map.initBlockTables()
     }
 
     /**

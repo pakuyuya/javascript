@@ -1,12 +1,15 @@
 'use strict';
 
+import common from "../common/common";
+import * as PIXI from "pixi.js"
+
 /**
  * 壁エンティティ
  */
 export default class Wall {
     static resources () {
         return {
-            images : [],
+            images : common.resolveImageResource(['wall.png']),
             sounds : []
         }
     }
@@ -32,6 +35,21 @@ export default class Wall {
 
         this.app = args.app
         this.drawable = false
+        this.x = 0
+        this.y = 0
+    }
+
+    attachEntityEvent(ctx) {
+        let texture = PIXI.Texture.fromImage(common.resolveImageResource('wall.png'))
+        texture.x = this.x
+        texture.y = this.y
+        this.texture = texture
+
+        this.app.getStage().addChild(this.texture)
+    }
+
+    detachEntityEvent(ctx) {
+        this.app.getStage().removeChild(this.texture)
     }
 
     /**

@@ -1,6 +1,8 @@
 'use strict'
 
 import Wall from '../entity/wall'
+import constants from '../common/constants'
+import common from '../common/common'
 
 /**
  * マップ
@@ -29,10 +31,10 @@ export default class Map {
             'readyResource' : 50,
         }
 
-        this.rowBlockSize = 18
-        this.colBlockSize = 20
-        this.pixPerBlock = 16
-        this.pixByStep = 2
+        this.rowBlockSize = constants.rowBlockSize
+        this.colBlockSize = constants.colBlockSize
+        this.pixByBlock = constants.pixByBlock
+        this.pixByStep = constants.pixByStep
 
         this.randomWall = 8
 
@@ -160,11 +162,29 @@ export default class Map {
         }
 
         this.blockTable = blockTable
+
+        this.syncEntities()
     }
 
     syncEntities () {
-        for (let blockEntity of this.blockEntities) {
-            this.app.detachEntity(blockEntity)
+        for (let wallEntity of this.wallEntities) {
+            this.app.detachEntity(wallEntity)
+        }
+        this.wallEntities = []
+        
+        for (let r = 0; r < this.blockTable.length; r++) {
+            for (let c = 0; c < this.blockTable[r].length; c++) {
+                if (this.blockTable[r][c]) {
+                    let wallEntity = new Wall({app: this.app, parent: this})
+                    wallEntity.x = c * this.pixByBlock
+                    wallEntity.y = r * this.pixByBlock
+                    this.wallEntities.push(wallEntity)
+                }
+            }
+        }
+
+        for (let wallEntity of this.wallEntities) {
+            this.app.attachEntity(wallEntity)
         }
     }
 

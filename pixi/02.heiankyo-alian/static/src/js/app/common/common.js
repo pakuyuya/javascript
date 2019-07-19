@@ -1,3 +1,6 @@
+import path from 'path'
+import constants from './constants'
+
 export default {
     urlPath(...paths) {
         let url = ''
@@ -17,6 +20,16 @@ export default {
 
     isUniqueId(test) {
         return test.startsWith('appid')
+    },
+
+    resolveImageResource(paths) {
+        return Array.isArray(paths)
+            ? paths.map(p => path.join(constants.imageResourceRoot, p)) : path.join(constants.imageResourceRoot, p)
+    },
+
+    resolveSoundResource(paths) {
+        return Array.isArray(paths)
+            ? paths.map(p => path.join(constants.soundResourceRoot, p)) : path.join(constants.soundResourceRoot, p)
     }
 }
 let _uniqueId = 0

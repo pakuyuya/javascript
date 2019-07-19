@@ -10,9 +10,11 @@
   },
   "watch": {
     "build": {
-      "patterns": ["src"],
+      "patterns": [
+        "src"
+      ],
       "extenstions": "js",
-      "delay": 2500,
+      "delay": 500,
       "runOnChangeOnly": false
     }
   },
@@ -24,6 +26,7 @@
   },
   "dependencies": {
     "npm-watch": "^0.6.0",
+    "path": "^0.12.7",
     "pixi.js": "^5.0.4"
   }
 }

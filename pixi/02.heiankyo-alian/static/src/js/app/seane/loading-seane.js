@@ -30,17 +30,16 @@ export default class LoadingSubSeane {
         let fnAppendLoadingRecursive = (target) => {
             if (!target)
                 return
-            
             this.appendLoading(target)
-            if (this.nextSeane.prototype.dependentEntities) {
-                let dependentEntities = this.nextSeane.prototype.dependentEntities
+            if (this.target.dependentEntities) {
+                let dependentEntities = this.target.dependentEntities
                 for (let name in dependentEntities) {
                     let entityClass = dependentEntities[name]
                     fnAppendLoadingRecursive(entityClass)
                 }
             }
         }
-        fnAppendLoadingRecursive(this.nextSeane.prototype)
+        fnAppendLoadingRecursive(this.nextSeane)
     }
 
     /**
