@@ -19,11 +19,6 @@ class CompleteSubSeane {
             'readyResource' : 50,
         }
 
-        this.resources = {
-            images : [],
-            sounds : [],
-        }
-
         this.app = args.app
         this.drawable = false
     }

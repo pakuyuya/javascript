@@ -30,11 +30,6 @@ export default class Wall {
             'move',
         ]
 
-        this.resources = {
-            images : [],
-            sounds : [],
-        }
-
         this.app = args.app
         this.drawable = false
     }
