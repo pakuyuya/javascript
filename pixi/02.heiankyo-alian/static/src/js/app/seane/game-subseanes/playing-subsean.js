@@ -4,7 +4,7 @@
  * プレイ中サブシーン
  */
 class PlayingSubSeane {
-    
+
     /**
      * コンストラクタ
      */
@@ -17,11 +17,6 @@ class PlayingSubSeane {
             'postUpdate' : 50,
             'draw'       : 50,
             'readyResource' : 50,
-        }
-
-        this.resources = {
-            images : [],
-            sounds : [],
         }
 
         this.app = args.app

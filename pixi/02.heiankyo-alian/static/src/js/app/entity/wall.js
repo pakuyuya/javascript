@@ -7,13 +7,6 @@ import * as PIXI from "pixi.js"
  * 壁エンティティ
  */
 export default class Wall {
-    static resources () {
-        return {
-            images : common.resolveImageResource(['wall.png']),
-            sounds : []
-        }
-    }
-
     /**
      * コンストラクタ
      */
@@ -37,6 +30,17 @@ export default class Wall {
         this.drawable = false
         this.x = 0
         this.y = 0
+    }
+
+    resources () {
+        return {
+            images : common.resolveImageResource(['wall.png']),
+            sounds : []
+        }
+    }
+
+    init () {
+        
     }
 
     attachEntityEvent(ctx) {

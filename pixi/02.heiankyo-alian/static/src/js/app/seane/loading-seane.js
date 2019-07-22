@@ -31,11 +31,12 @@ export default class LoadingSubSeane {
             if (!target)
                 return
             this.appendLoading(target)
-            if (this.target.dependentEntities) {
-                let dependentEntities = this.target.dependentEntities
+            if (target.dependentEntities) {
+                let dependentEntities = target.dependentEntities()
                 for (let name in dependentEntities) {
                     let entityClass = dependentEntities[name]
-                    fnAppendLoadingRecursive(entityClass)
+                    let entity = new entityClass({app: this.app})
+                    fnAppendLoadingRecursive(entity)
                 }
             }
         }
@@ -48,19 +49,19 @@ export default class LoadingSubSeane {
      * @param entity 対象のEntity
      * @return Promise
      */
-    appendLoading(entityClass) {
-        if (!entityClass || !entityClass.resources) {
+    appendLoading(entity) {
+        if (!entity || !entity.resources) {
             return
         }
 
-        let resources = entityClass.resources()
+        let resources = entity.resources()
 
         let readyResourcesCtx = {data : {} }
         let promises = []
         let owners = [entity, this]
         if (resources.images) {
             let promise = 
-                this.app.loadImages(resources.images, owners)
+                this.app.loadTextures(resources.images, owners)
                     .then((images) => {
                         readyResourcesCtx.data.images = images
                         this.countReady += images.length

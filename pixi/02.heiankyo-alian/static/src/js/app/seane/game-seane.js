@@ -10,12 +10,6 @@ import Holl from '../entity/holl'
  * ゲーム実行中シーン
  */
 export default class GameSeane {
-    static dependentEntities () {
-        return { Map, Player, Alian, Holl }
-    }
-    static resources () {
-        return { images : [] }
-    }
 
     /**
      * コンストラクタ
@@ -34,17 +28,23 @@ export default class GameSeane {
             'leaveSeane' : 50,
         }
 
-        this.resources = {
-            images : [],
-            sounds : [],
-        }
-
-
         this.drawable = false
 
         this.app = args.app
         this.map = new Map({app: this.map, parent: this})
-        this.switchSubSeane(OpeningSubSeane)
+    }
+
+    dependentEntities () {
+        return { Map, Player, Alian, Holl }
+    }
+
+    resources () {
+        return { images : [] }
+    }
+
+    init() {
+        let newSeane = new OpeningSubSeane({app: this.app, parent: this})
+        this.switchSubSeane(newSeane)
     }
     
 

@@ -4,13 +4,6 @@
  * プレイヤーエンティティ
  */
 export default class Player {
-    
-    static resources () {
-        return {
-            images : [],
-            sounds : []
-        }
-    }
 
     /**
      * コンストラクタ
@@ -32,14 +25,21 @@ export default class Player {
             'alian'
         ]
 
-        this.resources = {
-            images : [],
-            sounds : [],
-        }
-
         this.app = args.app;
         this.drawable = false;
     }
+
+    resources () {
+        return {
+            images : [],
+            sounds : []
+        }
+    }
+
+    init () {
+        
+    }
+
 
     /**
      * 事前updateイベント

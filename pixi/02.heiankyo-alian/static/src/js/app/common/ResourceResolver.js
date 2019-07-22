@@ -1,4 +1,5 @@
 import common from './common'
+import * as PIXI from 'pixi.js'
 
 /**
  * リソースリゾルバ
@@ -11,43 +12,41 @@ export default class ResourceResolver {
     constructor(args) {
         this.baseurl = args.baseurl
         this.cacheSnd = {}
+        this.pixiApp = args.pixiApp
     }
 
     /**
      * 画像のリソースを解決します。
-     * @param resource リソースのURL
+     * @param urllist リソースのURL
      * @param opt オプション
      * @return Promise(PIXI.Texture)
      */
-    resolveImages(resources, opt) {
-//        opt = Object.assign({}, opt)
+    resolveTextures(urllist, opt) {
         return new Promise((resolve, reject)=> {
-            PIXI.loader
-                .add(resources)
-                .setup(() => {
-                    const images = resources.map((resource, index, ary) => {
-                        ary[resource] = PIXI.loader.resources[common.urlPath(this.baseurl, resource)].texture
-                    })
-                    resolve(images)
+            this.pixiApp.loader
+                .add(urllist)
+                .load((loader, resources) => {
+                    let textures = urllist.map(url => new PIXI.TilingSprite(resources[url].texture))
+                    resolve(textures)
                 })
         })
     }
 
     /**
      * 音声のリソースを解決します。
-     * @param resources リソースURLの配列
+     * @param urllist リソースURLの配列
      * @param opt オプション
      * @return Promise(Array<Howl>)
      */
-    resolveSounds(resources, opt) {
-        let promises = resorces.map((resource, index, ary) => {
-            ary[resource] = new Promise((resolve, reject) => {
+    resolveSounds(urllist, opt) {
+        let promises = urllist.map((url, index, ary) => {
+            ary[url] = new Promise((resolve, reject) => {
                 const param = Object.assign({}, opt)
-                ret.src = [common.urlPath(args.baseurl, resource)]
+                param.src = [common.resolveSoundResource(url)]
                 resolve(new Howl(param))
             })
         })
         
-        return Promise.join(promises)
+        return Promise.all(promises)
     }
 }

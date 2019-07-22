@@ -4,13 +4,6 @@
  * エイリアンエンティティ
  */
 export default class Alian {
-    static resources () {
-        return {
-            images : [],
-            sounds : []
-        }
-    }
-
     constructor(args) {
         this.entityName = 'Alian';
 
@@ -29,15 +22,20 @@ export default class Alian {
             'player'
         ]
 
-        this.resources = {
-            images : [],
-            sounds : [],
-        }
-
         this.app = args.app;
         this.drawable = false;
     }
 
+    resources () {
+        return {
+            images : [],
+            sounds : []
+        }
+    }
+
+    init() {
+
+    }
     
     /**
      * 事前updateイベント

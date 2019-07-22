@@ -9,13 +9,6 @@ import common from '../common/common'
  */
 export default class Map {
 
-    static dependentEntities () {
-        return { Wall }
-    }
-    static resources () {
-        return { images : [] }
-    }
-
     /**
      * コンストラクタ
      */
@@ -44,6 +37,18 @@ export default class Map {
 
         this.app = args.app
         this.drawable = false
+    }
+
+    dependentEntities () {
+        return { Wall }
+    }
+
+    resources () {
+        return { images : [] }
+    }
+
+    init () {
+        
     }
 
     initBlockTables () {

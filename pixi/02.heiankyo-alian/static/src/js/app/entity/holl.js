@@ -5,10 +5,6 @@
  */
 export default class Holl {
 
-    static resources () {
-        return { images : [] }
-    }
-
     /**
      * コンストラクタ
      */
@@ -32,13 +28,16 @@ export default class Holl {
             'digHoll'
         ]
 
-        this.resources = {
-            images : [],
-            sounds : [],
-        }
-
         this.app = args.app;
         this.drawable = false;
+    }
+
+    resources () {
+        return { images : [] }
+    }
+
+    init () {
+        
     }
 
     /**

@@ -8,14 +8,6 @@ import * as PIXI from 'pixi.js'
  * シーンエンティティ
  */
 export default class TitleSeane {
-    
-    static dependentEntities () {
-        return {}
-    }
-    static resources () {
-        return { images : [] }
-    }
-
     /**
      * コンストラクタ
      */
@@ -38,6 +30,18 @@ export default class TitleSeane {
         this.drawable = true
 
         this.entities = {}
+    }
+
+    dependentEntities () {
+        return {}
+    }
+
+    resources () {
+        return { images : [] }
+    }
+
+    init () {
+        
     }
 
     /**

@@ -51,9 +51,16 @@ export default class {
             'readyEntity',
         ]
         
+        // PIXIアプリケーション
+        this.pixiApp = new PIXI.Application({
+            width: this.width,
+            height: this.height
+        })
+
         const initArgs = {
             app : this,
-            baseurl : (window.location.origin + '/' + window.location.pathname.replace('/?index.html$', ''))
+            baseurl : (window.location.origin + '/' + window.location.pathname.replace('/?index.html$', '')),
+            pixiApp: this.pixiApp
         }
         
         // 各コア機能
@@ -64,11 +71,6 @@ export default class {
         // 現在の描画シーン
         this.seane = null
 
-        // PIXIアプリケーション
-        this.pixiApp = new PIXI.Application({
-            width: this.width,
-            height: this.height
-        })
         args.appendTo.appendChild(this.pixiApp.view)
 
         // inputHandlerに追加
@@ -145,7 +147,7 @@ export default class {
     loadTextures(urls, owner) {
         let owners = Array.isArray(owner) ? owner : [owner]
         return this.resourceResolver
-                    .resolveImages(urls)
+                    .resolveTextures(urls)
                     .then((textures) => {
                         owners.forEach(owner => {
                             this.fire('readyResource', owner, { data: textures })
