@@ -150,11 +150,11 @@ export default class {
         let owners = Array.isArray(owner) ? owner : [owner]
         return this.resourceResolver
                     .resolveTextures(urls)
-                    .then((textures) => {
+                    .then((result) => {
                         owners.forEach(owner => {
-                            this.fire('readyResource', owner, { data: textures })
+                            this.fire('readyResource', owner, { data: {datas: result.textures, type: 'texture' }})
                         })
-                        return textures
+                        return result
                     })
     }
 
@@ -168,11 +168,11 @@ export default class {
         let owners = Array.isArray(owner) ? owner : [owner]
         return this.resourceResolver
                     .resolveSounds(urls)
-                    .then((sounds) => {
+                    .then((result) => {
                         owners.forEach(owner => {
-                            this.fire('readyResource', owner, { data: sounds })
+                            this.fire('readyResource', owner, { data: {datas:result.sounds, type: 'sound' }})
                         })
-                        return sounds
+                        return result
                     })
     }
 

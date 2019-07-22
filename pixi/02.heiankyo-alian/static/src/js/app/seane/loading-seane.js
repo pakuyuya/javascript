@@ -62,9 +62,10 @@ export default class LoadingSubSeane {
         if (resources.images) {
             let promise = 
                 this.app.loadTextures(resources.images, owners)
-                    .then((images) => {
-                        readyResourcesCtx.data.images = images
-                        this.countReady += images.length
+                    .then((result) => {
+                        readyResourcesCtx.data.images = result.textures
+                        this.countReady += result.count
+                        console.log('%s,%s', this.countReady, this.countRequired)
                     })
             promises.push(promise)
             this.countRequired += resources.images.length
@@ -73,9 +74,9 @@ export default class LoadingSubSeane {
         if (resources.sounds) {
             let promise = 
                 this.app.loadSounds(resources.sounds, owners)
-                    .then((sounds) => {
-                        readyResourcesCtx.data.sounds = sounds
-                        this.countReady += sounds.length
+                    .then((result) => {
+                        readyResourcesCtx.data.sounds = result.sounds
+                        this.countReady += result.count
                     })
             promises.push(promise)
             this.countRequired += resources.sounds.length

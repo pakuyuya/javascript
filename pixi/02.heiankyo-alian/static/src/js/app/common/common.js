@@ -24,12 +24,12 @@ export default {
 
     resolveImageResource(paths) {
         return Array.isArray(paths)
-            ? paths.map(p => path.join(constants.imageResourceRoot, p)) : path.join(constants.imageResourceRoot, p)
+            ? paths.map(p => path.join(constants.imageResourceRoot, p)) : path.join(constants.imageResourceRoot, paths)
     },
 
     resolveSoundResource(paths) {
         return Array.isArray(paths)
-            ? paths.map(p => path.join(constants.soundResourceRoot, p)) : path.join(constants.soundResourceRoot, p)
+            ? paths.map(p => path.join(constants.soundResourceRoot, p)) : path.join(constants.soundResourceRoot, paths)
     }
 }
 let _uniqueId = 0

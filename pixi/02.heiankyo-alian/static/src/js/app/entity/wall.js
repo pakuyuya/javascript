@@ -20,6 +20,8 @@ export default class Wall {
             'draw'       : 50,
             'damage'     : 50,
             'readyResource' : 50,
+            'attach' : 50,
+            'detach' : 50,
         }
 
         this.collisions = [
@@ -43,17 +45,19 @@ export default class Wall {
         
     }
 
-    attachEntityEvent(ctx) {
-        let texture = PIXI.Texture.fromImage(common.resolveImageResource('wall.png'))
-        texture.x = this.x
-        texture.y = this.y
+    attachEvent(ctx) {
+        let texture = PIXI.Texture.from(common.resolveImageResource('wall.png'))
         this.texture = texture
+        let sprite = new PIXI.Sprite(texture)
+        sprite.x = this.x
+        sprite.y = this.y
+        this.sprite = sprite
 
-        this.app.getStage().addChild(this.texture)
+        this.app.getStage().addChild(this.sprite)
     }
 
-    detachEntityEvent(ctx) {
-        this.app.getStage().removeChild(this.texture)
+    detachEvent(ctx) {
+        this.app.getStage().removeChild(this.sprite)
     }
 
     /**
@@ -85,14 +89,17 @@ export default class Wall {
      * @param ctx
      */
     drawEvent(ctx) {
-        // TODO:
+        this.texture.x = this.x || 0
+        this.texture.y = this.y || 0
     }
 
     /**
      * リソースロードイベント
      */
     readyResourceEvent(ctx) {
-        // TODO:
+        if (ctx.data.type === 'texture') {
+            this.texture = ctx.data.datas[common.resolveImageResource(['wall.png'])]
+        }
     }
     
     /**

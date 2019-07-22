@@ -26,8 +26,9 @@ export default class ResourceResolver {
             this.pixiApp.loader
                 .add(urllist)
                 .load((loader, resources) => {
-                    let textures = urllist.map(url => new PIXI.TilingSprite(resources[url].texture))
-                    resolve(textures)
+                    let textures = {}
+                    urllist.forEach(url => { textures[url] = new PIXI.TilingSprite(resources[url].texture) })
+                    resolve({textures: textures, count: urllist.length})
                 })
         })
     }
@@ -43,10 +44,16 @@ export default class ResourceResolver {
             ary[url] = new Promise((resolve, reject) => {
                 const param = Object.assign({}, opt)
                 param.src = [common.resolveSoundResource(url)]
-                resolve(new Howl(param))
+                resolve({ url: url, howl: new Howl(param) })
             })
         })
         
-        return Promise.all(promises)
+        return Promise.all(promises).then(rawdatas => {
+            let sounds = {}
+            for (let rawdata of rawdatas) {
+                sounds[rawdata.url] = rawdata.hawl
+            }
+            return {sounds: sounds, count: rawdatas.length}
+        })
     }
 }
