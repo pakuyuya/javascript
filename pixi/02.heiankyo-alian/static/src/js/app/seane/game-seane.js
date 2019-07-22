@@ -31,7 +31,7 @@ export default class GameSeane {
         this.drawable = false
 
         this.app = args.app
-        this.map = new Map({app: this.map, parent: this})
+        this.map = new Map({app: this.app, parent: this})
     }
 
     dependentEntities () {
@@ -40,11 +40,6 @@ export default class GameSeane {
 
     resources () {
         return { images : [] }
-    }
-
-    init() {
-        let newSeane = new OpeningSubSeane({app: this.app, parent: this})
-        this.switchSubSeane(newSeane)
     }
     
 
@@ -92,6 +87,9 @@ export default class GameSeane {
      * @param ctx
      */
     enterSeaneEvent(ctx) {
+        let newSeane = new OpeningSubSeane({app: this.app, parent: this})
+        this.switchSubSeane(newSeane)
+
         if (!this.app[this.uniqueId]) {
             this.attachApp()
             this.app[this.uniqueId] = true
@@ -127,17 +125,12 @@ export default class GameSeane {
     /**
      * サブシーンを切り替えます。
      * 
-     * @param newSeane 新しいシーン
+     * @param newSubSeane 新しいシーン
      */
-    switchSubSeane(newSeaneClass) {
+    switchSubSeane(newSubSeane) {
         if (this.subSeane) {
-            this.app.removeEntity(this.subSeane)
+            this.app.detachEntity(this.subSeane)
         }
-        let newSubSeane = new newSeaneClass({
-            app: this.app,
-            parentSeane: this
-        });
-
         this.app.attachEntity(newSubSeane)
         this.subSeane = newSubSeane
         this.app.fire('enterSeane', this.subSeane)

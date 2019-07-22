@@ -35,6 +35,8 @@ export default class Map {
         this.collisionSetMap = {}
         this.blockEntities = []
 
+        this.wallEntities = []
+
         this.app = args.app
         this.drawable = false
     }
@@ -51,6 +53,18 @@ export default class Map {
         
     }
 
+    dumpWalls (blockTables) {
+        let dump = ''
+        for (let i = 0; i < blockTables.length; i++) {
+            let line = ''
+            for (let j = 0; j < blockTables[i].length; j++) {
+                line += blockTables[i][j] ? '*' : ' '
+            }
+            dump += line + "\r\n"
+        }
+        console.log(dump)
+    }
+
     initBlockTables () {
         let blockTable = Array(this.rowBlockSize)
 
@@ -59,11 +73,13 @@ export default class Map {
         for (let i = 0; i < this.colBlockSize; i++) {
             blockTable[0][i] = true
         }
-        for (let i = 0; i < this.rowBlockSize; i++) {
+        for (let i = 1; i < this.rowBlockSize; i++) {
             blockTable[i] = new Array(this.colBlockSize)
-            for (let j = 0; j < this.colBlockSize; j++) {
-                blockTable[i][j] = j % 3 !== 1
+            blockTable[i][0] = true
+            for (let j = 1; j < this.colBlockSize - 1; j++) {
+                blockTable[i][j] = (i % 3 !== 1 && j % 3 !== 1)
             }
+            blockTable[i][this.colBlockSize - 1] = true
         }
         blockTable[this.rowBlockSize - 1] = new Array(this.colBlockSize)
         for (let i = 0; i < this.colBlockSize; i++) {
@@ -73,14 +89,16 @@ export default class Map {
         // random wall
         
         let row_randwallnum = ~~(this.randomWall / 2) + this.randomWall % 2
+        let col_randwallnum = ~~(this.randomWall / 2)
 
         let wallNum = 0
         while (wallNum < row_randwallnum) {
+
             let rand_r = ~~(Math.random() * ~~((this.rowBlockSize - 6) / 3))
             let rand_c = ~~(Math.random() * ~~((this.colBlockSize - 3) / 3))
 
             // wall is already exists.
-            if (blockTable[4 + rand_r * 3][2 + rand_c * 3]) {
+            if (blockTable[4 + rand_r * 3][2 + rand_c * 3]) {    
                 continue
             }
 
@@ -104,10 +122,12 @@ export default class Map {
                     if (r < 2 || r > this.rowBlockSize - 3 || c < 2 || c > this.colBlockSize - 3) {
                         continue
                     }
-                    if (!blockTable[r][c] && blocked > 0) {
+                    if (blockTable[r][c]) {
+                        blocked++
+                    }
+                    if (blocked > 2) {
                         return true
                     }
-                    blocked++
                 }
                 return false
             }
@@ -115,8 +135,9 @@ export default class Map {
             if (fnMakeDeadEnd(nearPassesL) || fnMakeDeadEnd(nearPassesR)) {
                 continue
             }
-
             blockTable[4 + rand_r * 3][2 + rand_c * 3] = true
+            blockTable[4 + rand_r * 3][2 + rand_c * 3 + 1] = true
+
             wallNum++
         }
         
@@ -161,12 +182,14 @@ export default class Map {
             if (fnMakeDeadEnd(nearPassesL) || fnMakeDeadEnd(nearPassesR)) {
                 continue
             }
+            blockTable[2 + rand_r * 3][4 + rand_c * 3] = true
+            blockTable[2 + rand_r * 3 + 1][4 + rand_c * 3] = true
 
-            blockTable[4 + rand_r * 3][2 + rand_c * 3] = true
             wallNum++
         }
 
         this.blockTable = blockTable
+        this.dumpWalls(blockTable)
 
         this.syncEntities()
     }

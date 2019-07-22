@@ -67,6 +67,7 @@ export default class LoadingSubSeane {
                         this.countReady += images.length
                     })
             promises.push(promise)
+            this.countRequired += resources.images.length
         }
 
         if (resources.sounds) {
@@ -77,9 +78,8 @@ export default class LoadingSubSeane {
                         this.countReady += sounds.length
                     })
             promises.push(promise)
+            this.countRequired += resources.sounds.length
         }
-
-        this.countRequired += promises.length
 
         return Promise.all(promises)
                 .then(() => {
@@ -91,7 +91,7 @@ export default class LoadingSubSeane {
         if (!this.countRequired) {
             this.perProgress = 100
         } else {
-            this.perProgress = ~~(this.countReady / this.countRequired * 100)
+            this.perProgress = ~~(this.countReady * 1.0 / this.countRequired * 100)
         }
     }
 
@@ -110,7 +110,7 @@ export default class LoadingSubSeane {
     updateEvent(ctx) {
         this.updateProgress()
 
-        if (this.perProgress >= 100) {
+        if (this.countReady >= this.countRequired) {
             this.app.switchSeane(this.nextSeane)
         }
     }

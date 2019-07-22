@@ -7,6 +7,8 @@ import IntervalTimer from './common/IntervalTimer'
 import TitleSeane from './seane/title-seane'
 
 import * as PIXI from 'pixi.js'
+import { isContext } from 'vm';
+import constants from './common/constants';
 
 /**
  * アプリケーション
@@ -20,8 +22,8 @@ export default class {
         this.uniqueId = common.uniqueId()
 
         let defaultOption = {
-            width: 800,
-            height: 600,
+            width: constants.canvasWidth,
+            height: constants.canvasHeight,
         }
 
         args = Object.assign(defaultOption, args)
