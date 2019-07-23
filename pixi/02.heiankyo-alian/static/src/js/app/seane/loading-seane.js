@@ -65,7 +65,6 @@ export default class LoadingSubSeane {
                     .then((result) => {
                         readyResourcesCtx.data.images = result.textures
                         this.countReady += result.count
-                        console.log('%s,%s', this.countReady, this.countRequired)
                     })
             promises.push(promise)
             this.countRequired += resources.images.length

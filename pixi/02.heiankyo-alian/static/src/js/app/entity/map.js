@@ -114,23 +114,18 @@ export default class Map {
                 [2 + (rand_r+1) * 3, 4 + (rand_c) * 3],
             ]
 
-            console.log('check %s,%s', 4 + rand_r * 3, 2 + rand_c * 3)
             let fnMakeDeadEnd = (passes) => {
                 let blocked = 0
                 for (let nearPass of passes) {
                     const r = nearPass[0]
                     const c = nearPass[1]
-                    console.log('%s,%s', r, c)
                     if (r < 2 || r > this.rowBlockSize - 3 || c < 2 || c > this.colBlockSize - 3) {
-                        console.log('continue')
                         continue
                     }
                     if (blockTable[r][c]) {
-                        console.log('blocked')
                         blocked++
                     }
                     if (blocked >= 2) {
-                        console.log('over 2')
                         return true
                     }
                 }
@@ -196,7 +191,6 @@ export default class Map {
         }
 
         this.blockTable = blockTable
-        this.dumpWalls(blockTable)
 
         this.syncEntities()
     }
