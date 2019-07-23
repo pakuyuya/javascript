@@ -27,6 +27,7 @@ export default class EventEmmitter {
             if (!entity.uniqueId) {
                 entity.uniqueId = common.uniqueId()
             }
+            
             entities[entity.uniqueId] = entity
             priorities[priority] = entities
             this.fireWorks[event] = priorities

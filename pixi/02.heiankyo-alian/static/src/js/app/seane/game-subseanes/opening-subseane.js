@@ -1,4 +1,4 @@
-'use strict'
+import common from '../../common/common'
 
 /**
  * オープニングデモ用サブシーン
@@ -9,6 +9,7 @@ export default class OpneningSubSeane {
      * コンストラクタ
      */
     constructor(args) {
+        this.uniqueId = common.uniqueId()
         this.entityName = 'OpneningSubSeane'
 
         this.events = {
@@ -17,11 +18,18 @@ export default class OpneningSubSeane {
             'postUpdate' : 50,
             'draw'       : 50,
             'readyResource' : 50,
+            'attach'     : 50,
+            'detach'     : 50,
         }
 
         this.app = args.app
-        this.parentSeane = args.parentSeane
+        this.parent = args.parent
         this.drawable = false
+        
+        this.eventFrameRemain = 100
+        this.timeline = {
+            100: () => { this.parent.player.setVisible(true) }
+        }
     }
 
     /**
@@ -37,6 +45,10 @@ export default class OpneningSubSeane {
      * @param ctx
      */
     updateEvent(ctx) {
+        if (this.timeline[this.eventFrameRemain]) {
+            this.timeline[this.eventFrameRemain]()
+        }
+        --this.eventFrameRemain
         // TODO:
     }
 
@@ -61,5 +73,13 @@ export default class OpneningSubSeane {
      */
     readyResourceEvent(ctx) {
         // TODO:
+    }
+
+    attachEvent(ctx) {
+        console.log('attached')
+    }
+
+    detachEvent(ctx) {
+        console.log('dettached')
     }
 }

@@ -32,6 +32,7 @@ export default class GameSeane {
 
         this.app = args.app
         this.map = new Map({app: this.app, parent: this})
+        this.player = new Player({app: this.app, parent: this})
     }
 
     dependentEntities () {
@@ -102,6 +103,7 @@ export default class GameSeane {
     
     attachApp() {
         this.map.initBlockTables()
+        this.app.attachEntity(this.player)
     }
 
     /**
@@ -119,7 +121,7 @@ export default class GameSeane {
     }
 
     detachApp() {
-        // TODO: 
+        this.app.detachEntity(this.player)
     }
 
     /**

@@ -23,7 +23,7 @@ export default class ResourceResolver {
      */
     resolveTextures(urllist, opt) {
         return new Promise((resolve, reject)=> {
-            this.pixiApp.loader
+            new PIXI.Loader()
                 .add(urllist)
                 .load((loader, resources) => {
                     let textures = {}

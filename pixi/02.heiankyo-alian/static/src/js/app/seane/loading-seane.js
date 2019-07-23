@@ -59,6 +59,7 @@ export default class LoadingSubSeane {
         let readyResourcesCtx = {data : {} }
         let promises = []
         let owners = [entity, this]
+
         if (resources.images) {
             let promise = 
                 this.app.loadTextures(resources.images, owners)
