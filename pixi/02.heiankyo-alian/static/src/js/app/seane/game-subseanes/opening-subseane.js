@@ -76,10 +76,10 @@ export default class OpneningSubSeane {
     }
 
     attachEvent(ctx) {
-        console.log('attached')
+
     }
 
     detachEvent(ctx) {
-        console.log('dettached')
+
     }
 }
