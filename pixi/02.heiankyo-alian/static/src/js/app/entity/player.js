@@ -56,9 +56,8 @@ export default class Player {
     }
 
     init () {
-        
-    }
 
+    }
 
     /**
      * 事前updateイベント
@@ -73,7 +72,56 @@ export default class Player {
      * @param ctx
      */
     updateEvent(ctx) {
-        // TODO:
+        let direction = this.detectPushedArrow()
+
+        if (direction) {
+            this.direction = direction
+
+            let moveToX = this.x
+            let moveToY = this.y
+            switch (direction) {
+            case 'up':
+                moveToY -= constants.pixByStep
+                break
+            case 'down':
+                moveToY += constants.pixByStep
+                break
+            case 'left':
+                moveToX -= constants.pixByStep
+                break
+            case 'right':
+                moveToX += constants.pixByStep
+                break
+            }
+
+            // TODO: movable check & adjust
+
+            this.x = moveToX
+            this.y = moveToY
+        }
+    }
+
+    /**
+     * 押下されているキーを取得する
+     * @returns {string|undefined} 'up','left','right','down', 押下なしの場合 undefined
+     */
+    detectPushedArrow () {
+        let checkKeys = [
+            'up',
+            'left',
+            'right',
+            'down'
+        ]
+        let idxCrtDirection = checkKeys.indexOf(this.direction)
+        checkKeys.splice(idxCrtDirection, 1, this.direction)
+
+        let keys = this.app.inputHandler.getFiredKeys()
+        for (let key of checkKeys) {
+            if (keys[key]) {
+                return key
+            }
+        }
+        return undefined
     }
 
     /**
@@ -133,6 +181,8 @@ export default class Player {
 
     refreshPict () {
         for (let i = 0; i < this.picts.length; i++) {
+            this.picts[i].x = this.x
+            this.picts[i].y = this.y
             this.picts[i].visible = i === this.pictIndex && this.visible
         }
     }

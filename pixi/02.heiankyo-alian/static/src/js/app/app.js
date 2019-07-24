@@ -39,10 +39,10 @@ export default class {
         this.keyboardMap = {
             'z' : 'a',
             'x' : 'b',
-            'allowup'    : 'up',
-            'allowdown'  : 'down',
-            'allowleft'  : 'left',
-            'allowright' : 'right',
+            'arrowup'    : 'up',
+            'arrowdown'  : 'down',
+            'arrowleft'  : 'left',
+            'arrowright' : 'right',
         }
 
         // 確かデバッグ用のフィールド
