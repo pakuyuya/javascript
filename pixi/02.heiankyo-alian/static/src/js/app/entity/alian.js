@@ -5,7 +5,7 @@
  */
 export default class Alian {
     constructor(args) {
-        this.entityName = 'Alian';
+        this.entityName = 'Alian'
 
         this.events = {
             'preUpdate'     : 50,
@@ -15,15 +15,20 @@ export default class Alian {
             'dropHoll'      : 50,
             'closeHoll'     : 50,
             'readyResource' : 50,
-        };
+        }
 
         this.collisions = [
             'holl',
             'player'
         ]
 
-        this.app = args.app;
-        this.drawable = false;
+        this.app = args.app
+        this.drawable = false
+        
+        this.x = 0
+        this.y = 0
+        this.width = constants.pixByBlock
+        this.height = constants.pixByBlock
     }
 
     resources () {

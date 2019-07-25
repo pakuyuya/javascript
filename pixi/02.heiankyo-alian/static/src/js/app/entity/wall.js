@@ -32,6 +32,9 @@ export default class Wall {
         this.drawable = false
         this.x = 0
         this.y = 0
+
+        this.width = constants.pixByBlock
+        this.height = constants.pixByBlock
     }
 
     resources () {
