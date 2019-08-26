@@ -26,11 +26,15 @@ export default class GameSeane {
             'readyResource' : 50,
             'enterSeane' : 50,
             'leaveSeane' : 50,
+            'watchAttached' : 50,
+            'watchDetached' : 50,
         }
+
+        this.app = args.app
+        this.parent = args.parent
 
         this.drawable = false
 
-        this.app = args.app
         this.map = new Map({app: this.app, parent: this})
         this.player = new Player({app: this.app, parent: this})
     }
@@ -83,6 +87,14 @@ export default class GameSeane {
         // TODO:
     }
 
+    watchAttachedEvent(ctx) {
+        this.map.addCollisionEntity(ctx.data.entity)
+    }
+
+    watchDetachedEvent(ctx) {
+        this.map.removeCollisionEntity(ctx.data.entity)
+    }
+
     /**
      * シーン開始イベント
      * @param ctx
@@ -100,6 +112,9 @@ export default class GameSeane {
         }
     }
 
+    addCollisionTree(entity) {
+        this.map.addCollisionEntity(entity)
+    }
     
     attachApp() {
         this.map.initBlockTables()

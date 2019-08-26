@@ -19,11 +19,13 @@ export default class Alian {
         }
 
         this.collisions = [
+            'player',
             'holl',
-            'player'
         ]
 
         this.app = args.app
+        this.parent = args.parent
+
         this.drawable = false
         
         this.x = 0

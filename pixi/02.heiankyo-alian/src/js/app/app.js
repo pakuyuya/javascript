@@ -128,6 +128,7 @@ export default class {
     attachEntity(entity) {
         this.eventEmitter.attachEntity(entity)
         this.eventEmitter.fire('attach', entity, this, {app: this})
+        this.fireEach('watchAttached', {data: {entity,},})
     }
 
     /**
@@ -138,6 +139,7 @@ export default class {
         // イベント
         this.eventEmitter.fire('detach', entity, this, {app: this})
         this.eventEmitter.detachEntity(entity)
+        this.fireEach('watchDetached', {data: {entity,},})
     }
 
     /**

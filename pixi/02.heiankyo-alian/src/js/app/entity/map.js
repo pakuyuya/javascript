@@ -38,6 +38,7 @@ export default class Map {
         this.wallEntities = []
 
         this.app = args.app
+        this.parent = args.parent
         this.drawable = false
     }
 
@@ -204,7 +205,7 @@ export default class Map {
         for (let r = 0; r < this.blockTable.length; r++) {
             for (let c = 0; c < this.blockTable[r].length; c++) {
                 if (this.blockTable[r][c]) {
-                    let wallEntity = new Wall({app: this.app, parent: this})
+                    let wallEntity = new Wall({app: this.app, parent: this, parentSeane: this.parent})
                     wallEntity.x = c * this.pixByBlock
                     wallEntity.y = r * this.pixByBlock
                     this.wallEntities.push(wallEntity)
@@ -229,9 +230,19 @@ export default class Map {
         if (!entity.collisions)
             return
         
-        for (let key in entity.collisions) {
-            let set = this.collisionSetMap[key] || []
-            set.push(entity)
+        for (let key of entity.collisions) {
+            let set = this.collisionSetMap[key] || {}
+            set[entity.uniqueId] = entity
+            this.collisionSetMap[key] = set
+        }
+    }
+    removeCollisionEntity(entity) {
+        if (!entity.collisions)
+            return
+        
+        for (let key of entity.collisions) {
+            let set = this.collisionSetMap[key]
+            delete set[entity.uniqueId]
             this.collisionSetMap[key] = set
         }
     }
@@ -246,16 +257,14 @@ export default class Map {
         
         let list = []
 
-        for (let e of this.collisionSetMap[collisionType]) {
+        const set = this.collisionSetMap[collisionType]
+        for (let key in set) {
+            const e = set[key]
             if (e.isCollision(entity, collisionType)) {
                 list.push(e)
             }
         }
         return list
-    }
-
-    clearCollisionEntities() {
-        this.collisionSetMap = {}
     }
 
     /**

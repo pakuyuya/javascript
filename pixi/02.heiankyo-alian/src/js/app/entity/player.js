@@ -27,12 +27,14 @@ export default class Player {
         };
 
         this.collisions = [
-            'holl',
-            'alian'
+            'player',
         ]
 
-        this.app = args.app;
-        this.drawable = false;
+        this.app = args.app
+        this.parent = args.parent
+    
+        this.drawable = false
+    
         this.x = constants.pixByBlock
         this.y = constants.pixByBlock
 
@@ -77,27 +79,68 @@ export default class Player {
         if (direction) {
             this.direction = direction
 
-            let moveToX = this.x
-            let moveToY = this.y
+            let moveTo = {x: this.x, y: this.y}
             switch (direction) {
             case 'up':
-                moveToY -= constants.pixByStep
+                moveTo.y -= constants.pixByStep
                 break
             case 'down':
-                moveToY += constants.pixByStep
+                moveTo.y += constants.pixByStep
                 break
             case 'left':
-                moveToX -= constants.pixByStep
+                moveTo.x -= constants.pixByStep
                 break
             case 'right':
-                moveToX += constants.pixByStep
+                moveTo.x += constants.pixByStep
                 break
             }
 
             // TODO: movable check & adjust
 
-            this.x = moveToX
-            this.y = moveToY
+            // 壁と衝突判定をとり、xyを補正する
+            moveTo = (() => {
+                let collisionTestObject = Object.assign({}, this)
+                collisionTestObject.x = moveTo.x
+                collisionTestObject.y = moveTo.y
+
+                let collisions = this.parent.map.getCollisions(collisionTestObject, 'wall')
+
+                if (!collisions || collisions.length === 0) {
+                    return moveTo
+                }
+                if (collisions.length > 1) {
+                    // あたった壁が2枚の場合は止まる
+                    return {x: this.x, y: this.y}
+                }
+                // if (collisions.length === 1)
+                if ((direction === 'left' || direction === 'right') && collisions[0].x === this.x
+                    || (direction === 'up' || direction === 'down') && collisions[0].y === this.y) {
+                        return {x: this.x, y: this.y}
+                }
+
+                // あたった壁が1枚の場合、進行方向コーナーであれば、近くの通路のほうに曲がる補正をつける。
+                let adjustTo = {x: this.x, y: this.y}
+
+                const wall = collisions[0]
+                const xy = (direction === 'up' || direction === 'down') ? 'x' : 'y'
+
+                const vect = (wall[xy] - this[xy]) <= 0 ? 1 : -1
+
+                collisionTestObject = Object.assign({}, this)
+                collisionTestObject[xy] = adjustTo[xy] = this[xy] + vect * constants.pixByStep
+
+                // collisionをとり、ぶつかったら補正する
+                collisions = this.parent.map.getCollisions(collisionTestObject, 'wall')
+                if (collisions && collisions.length > 0) {
+                    const col0 = collisions[0]
+                    adjustTo[xy] = col0[xy] + (xy === 'x' ? col0.width : col0.height) * vect * -1
+                }
+
+                return adjustTo
+            })()
+
+            this.x = moveTo.x
+            this.y = moveTo.y
         }
     }
 

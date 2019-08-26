@@ -12,7 +12,7 @@ export default class Wall {
      * コンストラクタ
      */
     constructor(args) {
-        this.entityName = 'Player'
+        this.entityName = 'Wall'
 
         this.events = {
             'preUpdate'  : 50,
@@ -26,10 +26,13 @@ export default class Wall {
         }
 
         this.collisions = [
-            'move',
+            'wall',
         ]
 
         this.app = args.app
+        this.parent = args.parent
+        this.parentSeane = args.parentSeane
+
         this.drawable = false
         this.x = 0
         this.y = 0
@@ -114,7 +117,7 @@ export default class Wall {
     }
 
     isCollision (sender, collisionType) {
-        return sender.x <= this.x + this.width && sender.x + sender.width >= this.x
-                && sender.y <= this.y + this.height && sender.y + sender.height >= this.y
+        return sender.x < this.x + this.width && sender.x + sender.width > this.x
+                && sender.y < this.y + this.height && sender.y + sender.height > this.y
     }
 }
