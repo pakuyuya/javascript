@@ -1,4 +1,5 @@
 'use strict';
+import constants from "../common/constants"
 
 /**
  * 穴エンティティ
@@ -99,5 +100,10 @@ export default class Holl {
      */
     fillHollEvent(ctx) {
         // TODO:
+    }
+
+    isCollision (sender, collisionType) {
+        return sender.x <= this.x + this.width && sender.x + sender.width >= this.x
+                && sender.y <= this.y + this.height && sender.y + sender.height >= this.y
     }
 }

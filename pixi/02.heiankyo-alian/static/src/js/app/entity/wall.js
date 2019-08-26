@@ -1,6 +1,7 @@
 'use strict';
 
-import common from "../common/common";
+import common from "../common/common"
+import constants from "../common/constants"
 import * as PIXI from "pixi.js"
 
 /**
@@ -110,5 +111,10 @@ export default class Wall {
      */
     damageEvent(ctx) {
         // TODO:
+    }
+
+    isCollision (sender, collisionType) {
+        return sender.x <= this.x + this.width && sender.x + sender.width >= this.x
+                && sender.y <= this.y + this.height && sender.y + sender.height >= this.y
     }
 }

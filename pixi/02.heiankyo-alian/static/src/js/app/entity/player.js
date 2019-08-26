@@ -179,6 +179,11 @@ export default class Player {
         this.refreshPict()
     }
 
+    isCollision (sender, collisionType) {
+        return sender.x <= this.x + this.width && sender.x + sender.width >= this.x
+                && sender.y <= this.y + this.height && sender.y + sender.height >= this.y
+    }
+
     refreshPict () {
         for (let i = 0; i < this.picts.length; i++) {
             this.picts[i].x = this.x
@@ -186,4 +191,5 @@ export default class Player {
             this.picts[i].visible = i === this.pictIndex && this.visible
         }
     }
+    
 }

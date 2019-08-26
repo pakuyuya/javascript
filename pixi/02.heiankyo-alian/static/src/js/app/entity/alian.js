@@ -1,4 +1,5 @@
 'use strict';
+import constants from "../common/constants"
 
 /**
  * エイリアンエンティティ
@@ -126,5 +127,10 @@ export default class Alian {
      */
     drawEvent(ctx) {
         // TODO:
+    }
+
+    isCollision (sender, collisionType) {
+        return sender.x <= this.x + this.width && sender.x + sender.width >= this.x
+                && sender.y <= this.y + this.height && sender.y + sender.height >= this.y
     }
 }
