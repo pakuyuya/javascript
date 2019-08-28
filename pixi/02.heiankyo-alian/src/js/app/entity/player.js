@@ -120,8 +120,8 @@ export default class Player {
                     return {x: this.x, y: this.y}
                 }
                 // if (collisions.length === 1)
-                if ((direction === 'left' || direction === 'right') && collisions[0].x === this.x
-                    || (direction === 'up' || direction === 'down') && collisions[0].y === this.y) {
+                if ((direction === 'left' || direction === 'right') && collisions[0].y === this.y
+                    || (direction === 'up' || direction === 'down') && collisions[0].x === this.x) {
                         return {x: this.x, y: this.y}
                 }
 
@@ -221,8 +221,8 @@ export default class Player {
 
         this.picts = [new PIXI.Sprite(pict1), new PIXI.Sprite(pict2)]
         for (let pict of this.picts) {
-            pict.x = this.x
-            pict.y = this.y
+            pict.x = this.x + this.width / 2
+            pict.y = this.y + this.width / 2
             pict.anchor.set(0.5, 0.5)
             this.app.getStage().addChild(pict)
         }
