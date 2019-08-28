@@ -3,6 +3,9 @@ import constants from '../common/constants'
 
 import * as PIXI from 'pixi.js'
 
+const FRAME_DULATION_BY_STEP = 2
+
+
 /**
  * プレイヤーエンティティ
  */
@@ -45,6 +48,9 @@ export default class Player {
         this.visible = false
 
         this.direction = 'left'
+
+        this.moved = false
+        this.frameToStep = FRAME_DULATION_BY_STEP
     }
 
     resources () {
@@ -75,6 +81,7 @@ export default class Player {
      */
     updateEvent(ctx) {
         let direction = this.detectPushedArrow()
+        this.moved = false
 
         if (direction) {
             this.direction = direction
@@ -139,6 +146,8 @@ export default class Player {
                 return adjustTo
             })()
 
+            this.moved = this.x !== moveTo.x || this.y !== moveTo.y
+
             this.x = moveTo.x
             this.y = moveTo.y
         }
@@ -180,6 +189,15 @@ export default class Player {
      * @param ctx
      */
     drawEvent(ctx) {
+        if (this.moved) {
+            --this.frameToStep
+        }
+
+        if (this.frameToStep < 0) {
+            this.frameToStep = FRAME_DULATION_BY_STEP
+            this.pictIndex = (this.pictIndex + 1) % this.picts.length
+        }
+
         this.refreshPict()
     }
 
