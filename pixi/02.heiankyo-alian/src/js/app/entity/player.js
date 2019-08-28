@@ -102,8 +102,6 @@ export default class Player {
                 break
             }
 
-            // TODO: movable check & adjust
-
             // 壁と衝突判定をとり、xyを補正する
             moveTo = (() => {
                 let collisionTestObject = Object.assign({}, this)
