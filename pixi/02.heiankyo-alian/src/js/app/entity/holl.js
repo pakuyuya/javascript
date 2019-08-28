@@ -1,6 +1,8 @@
 'use strict';
 import constants from "../common/constants"
 
+import * as PIXI from 'pixi.js'
+
 /**
  * 穴エンティティ
  */
@@ -21,6 +23,8 @@ export default class Holl {
             'escapeEntity'  : 50,
             'digHoll'       : 50,
             'fillHoll'      : 50,
+            'attach'        : 50,
+            'detach'        : 50,
         }
 
         this.collisions = [
@@ -90,7 +94,7 @@ export default class Holl {
      * 穴掘りイベント
      * @param ctx
      */
-    digHollEvent(ctx) {
+    digEvent(ctx) {
         // TODO:
     }
 
@@ -98,12 +102,56 @@ export default class Holl {
      * 穴埋めイベント
      * @param ctx
      */
-    fillHollEvent(ctx) {
+    fillEvent(ctx) {
         // TODO:
     }
 
+    /**
+     * 敵落ちイベント
+     * @param {any} ctx 
+     */
+    fallEnemyEvent(ctx) {
+        // TODO:
+    }
+
+    /**
+     * 敵解放イベント
+     * @param {any} ctx 
+     */
+    releaseEnemyEvent(ctx) {
+        // TODO:
+    }
+
+    /**
+     * アタッチイベント
+     * @param {any} ctx 
+     */
+    attachEvent(ctx) {
+        
+        let circle = new PIXI.Graphics()
+        circle.lineStyle(1, 0xFF3300, 1);
+        circle.drawCircle(this.x + this.width/2, this.y + this.width/2, this.width / 4)
+        this.circle = circle
+        this.app.getStage().addChild(circle)
+    }
+
+    /**
+     * デタッチイベント
+     * @param {any} ctx 
+     */
+    detachEvent(ctx) {
+        if (this.circle) {
+            this.app.getStage().removeChild(this.circle)
+        }
+    }
+
     isCollision (sender, collisionType) {
-        return sender.x <= this.x + this.width && sender.x + sender.width >= this.x
-                && sender.y <= this.y + this.height && sender.y + sender.height >= this.y
+        const x = this.x + this.width / 2
+        const y = this.y + this.height / 2
+        const w = this.x + this.width / 2
+        const h = this.y + this.height / 2
+
+        return sender.x <= x + w && sender.x + sender.width >= x
+                && sender.y <= y + h && sender.y + sender.height >= y
     }
 }

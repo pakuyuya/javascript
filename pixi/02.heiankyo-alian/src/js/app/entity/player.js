@@ -149,6 +149,46 @@ export default class Player {
             this.x = moveTo.x
             this.y = moveTo.y
         }
+
+        if (!direction && this.app.inputHandler.isPushed('a')) {
+            // 穴掘り試行
+            (()=> {
+                const pbb = constants.pixByBlock
+
+                const hollDummy = {
+                    x: this.x - (this.x % (pbb/2) < pbb/4 ? this.x % (pbb / 2) : this.x % (pbb / 2) - pbb/2),
+                    y: this.y - (this.y % (pbb/2) < pbb/4 ? this.y % (pbb / 2) : this.y % (pbb / 2) - pbb/2),
+                    width: pbb / 2,
+                    height: pbb / 2,
+                }
+
+                switch (this.direction) {
+                    case 'right': hollDummy.x += pbb / 2; break
+                    case 'down': hollDummy.y += pbb / 2; break
+                    case 'left': hollDummy.x -= pbb / 2; break
+                    case 'up': hollDummy.y -= pbb / 2; break
+                }
+
+                // 穴検知
+                const holls = this.parent.map.getCollisions(hollDummy, 'holl')
+                if (holls && holls.length) {
+                    this.app.fire('dig', holls[0], {sender: this})
+                    return
+                    // TODO: 穴掘りグレードアップしたときの同期的アニメーション実装
+                }
+
+                // 壁検知
+                const walls = this.parent.map.getCollisions(hollDummy, 'wall')
+                if (walls && walls.length) {
+                    return
+                }
+
+                // 穴生成
+                const holl = this.parent.createHoll(hollDummy)
+                this.app.fire('dig', holl, this)
+
+            })()
+        }
     }
 
     /**

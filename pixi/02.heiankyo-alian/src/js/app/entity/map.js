@@ -3,6 +3,7 @@
 import Wall from '../entity/wall'
 import constants from '../common/constants'
 import common from '../common/common'
+import Holl from './holl';
 
 /**
  * マップ

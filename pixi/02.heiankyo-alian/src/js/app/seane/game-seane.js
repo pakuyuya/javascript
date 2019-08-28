@@ -37,6 +37,8 @@ export default class GameSeane {
 
         this.map = new Map({app: this.app, parent: this})
         this.player = new Player({app: this.app, parent: this})
+
+        this.holls = {}
     }
 
     dependentEntities () {
@@ -46,7 +48,31 @@ export default class GameSeane {
     resources () {
         return { images : [] }
     }
-    
+
+    /**
+     * Holl を生成する
+     * @param {{x: number, y:number}} position 生成位置
+     * @returns {Holl} 生成したHollの参照
+     */
+    createHoll({x, y}) {
+        const holl = new Holl({app: this.app, parent: this})
+        holl.x = x
+        holl.y = y
+
+        this.holls[holl.uniqueId] = holl
+        this.app.attachEntity(holl)
+
+        return holl
+    }
+
+    /**
+     * Hollを除去する
+     * @param {Holl} holl 対象
+     */
+    removeHoll(holl) {
+        delete this.holls[holl.uniqueId]
+        this.app.detachEntity(holl)
+    }
 
     /**
      * 事前updateイベント
@@ -119,6 +145,10 @@ export default class GameSeane {
     attachApp() {
         this.map.initBlockTables()
         this.app.attachEntity(this.player)
+
+        for (const key in this.holls) {
+            this.app.attachEntity(this.holls[key])
+        }
     }
 
     /**
@@ -137,6 +167,10 @@ export default class GameSeane {
 
     detachApp() {
         this.app.detachEntity(this.player)
+
+        for (const holl of this.holls) {
+            this.app.detachEntity(holl)
+        }
     }
 
     /**
