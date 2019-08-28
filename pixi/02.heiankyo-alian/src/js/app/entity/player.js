@@ -223,7 +223,7 @@ export default class Player {
         for (let pict of this.picts) {
             pict.x = this.x
             pict.y = this.y
-            pict.anchor.set(0.0, 0.0)
+            pict.anchor.set(0.5, 0.5)
             this.app.getStage().addChild(pict)
         }
         this.refreshPict()
@@ -246,10 +246,21 @@ export default class Player {
     }
 
     refreshPict () {
+        const pictVects = (() => {
+            switch (this.direction) {
+                case 'right':  return {rad: .0, scale: {x: 1, y: 1}}
+                case 'down': return {rad: .5 * Math.PI, scale: {x: 1, y: 1}}
+                case 'left':   return {rad: .0, scale: {x: -1, y: 1}}
+                case 'up':    return {rad: .5 * Math.PI, scale: {x: -1, y: 1}}
+            }
+        })()
+
         for (let i = 0; i < this.picts.length; i++) {
-            this.picts[i].x = this.x
-            this.picts[i].y = this.y
+            this.picts[i].x = this.x + this.width / 2
+            this.picts[i].y = this.y + this.width / 2
             this.picts[i].visible = i === this.pictIndex && this.visible
+            this.picts[i].scale = pictVects.scale
+            this.picts[i].rotation = pictVects.rad
         }
     }
     
