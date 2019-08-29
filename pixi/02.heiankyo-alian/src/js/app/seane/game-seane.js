@@ -71,7 +71,7 @@ export default class GameSeane {
      */
     removeHoll(holl) {
         delete this.holls[holl.uniqueId]
-        this.app.detachEntity(holl)
+        this.app.removeEntity(holl)
     }
 
     /**

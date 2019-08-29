@@ -150,29 +150,33 @@ export default class Player {
             this.y = moveTo.y
         }
 
+        const generateDetectDummy = () => {
+            const pbb = constants.pixByBlock
+            const hollDummy = {
+                x: this.x - (this.x % (pbb/2) < pbb/4 ? this.x % (pbb / 2) : this.x % (pbb / 2) - pbb/2),
+                y: this.y - (this.y % (pbb/2) < pbb/4 ? this.y % (pbb / 2) : this.y % (pbb / 2) - pbb/2),
+                width: pbb / 2,
+                height: pbb / 2,
+            }
+
+            switch (this.direction) {
+                case 'right': hollDummy.x += pbb / 2; break
+                case 'down': hollDummy.y += pbb / 2; break
+                case 'left': hollDummy.x -= pbb / 2; break
+                case 'up': hollDummy.y -= pbb / 2; break
+            }
+            return hollDummy
+        }
+
         if (!direction && this.app.inputHandler.isPushed('a')) {
             // 穴掘り試行
             (()=> {
-                const pbb = constants.pixByBlock
-
-                const hollDummy = {
-                    x: this.x - (this.x % (pbb/2) < pbb/4 ? this.x % (pbb / 2) : this.x % (pbb / 2) - pbb/2),
-                    y: this.y - (this.y % (pbb/2) < pbb/4 ? this.y % (pbb / 2) : this.y % (pbb / 2) - pbb/2),
-                    width: pbb / 2,
-                    height: pbb / 2,
-                }
-
-                switch (this.direction) {
-                    case 'right': hollDummy.x += pbb / 2; break
-                    case 'down': hollDummy.y += pbb / 2; break
-                    case 'left': hollDummy.x -= pbb / 2; break
-                    case 'up': hollDummy.y -= pbb / 2; break
-                }
+                const hollDummy = generateDetectDummy()
 
                 // 穴検知
                 const holls = this.parent.map.getCollisions(hollDummy, 'holl')
                 if (holls && holls.length) {
-                    this.app.fire('dig', holls[0], {sender: this})
+                    this.app.fire('digHoll', holls[0], {sender: this})
                     return
                     // TODO: 穴掘りグレードアップしたときの同期的アニメーション実装
                 }
@@ -185,8 +189,22 @@ export default class Player {
 
                 // 穴生成
                 const holl = this.parent.createHoll(hollDummy)
-                this.app.fire('dig', holl, this)
+                this.app.fire('digHoll', holl, this)
 
+            })()
+        }
+        if (!direction && this.app.inputHandler.isPushed('b')) {
+            // 穴掘り試行
+            (()=> {
+                const hollDummy = generateDetectDummy()
+
+                // 穴検知
+                const holls = this.parent.map.getCollisions(hollDummy, 'holl')
+                if (holls && holls.length) {
+                    this.app.fire('fillHoll', holls[0], {sender: this})
+                    return
+                    // TODO: 穴掘りグレードアップしたときの同期的アニメーション実装
+                }
             })()
         }
     }

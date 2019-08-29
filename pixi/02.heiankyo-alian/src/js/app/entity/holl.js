@@ -3,6 +3,9 @@ import constants from "../common/constants"
 
 import * as PIXI from 'pixi.js'
 
+const MAX_LEVEL = 4
+const DIG_INTEVAL = 15
+
 /**
  * 穴エンティティ
  */
@@ -28,18 +31,20 @@ export default class Holl {
         }
 
         this.collisions = [
-            'alian',
-            'player',
-            'digHoll'
+            'holl',
         ]
 
-        this.app = args.app;
+        this.app = args.app
+        this.parent = args.parent
         this.drawable = false;
 
         this.x = 0
         this.y = 0
         this.width = constants.pixByBlock
         this.height = constants.pixByBlock
+        
+        this.digLevel = 0
+        this.digIterval = 0
     }
 
     resources () {
@@ -63,7 +68,9 @@ export default class Holl {
      * @param ctx
      */
     updateEvent(ctx) {
-        // TODO:
+        if (this.digIterval > 0) {
+            --this.digIterval
+        }
     }
 
     /**
@@ -79,7 +86,9 @@ export default class Holl {
      * @param ctx
      */
     drawEvent(ctx) {
-        // TODO:
+        for (let i = 0; i<this.circles.length; i++) {
+            this.circles[i].visible = (i + 1) === this.digLevel
+        }
     }
 
     /**
@@ -94,16 +103,28 @@ export default class Holl {
      * 穴掘りイベント
      * @param ctx
      */
-    digEvent(ctx) {
-        // TODO:
+    digHollEvent(ctx) {
+        if (this.digIterval <= 0) {
+            if (this.digLevel < MAX_LEVEL) {
+                ++this.digLevel
+                this.digIterval = DIG_INTEVAL
+            }
+        }
     }
 
     /**
      * 穴埋めイベント
      * @param ctx
      */
-    fillEvent(ctx) {
+    fillHollEvent(ctx) {
         // TODO:
+        if (this.digIterval <= 0) {
+            if (--this.digLevel <= 0) {
+                this.parent.removeHoll(this)
+                return
+            }
+            this.digIterval = DIG_INTEVAL
+        }
     }
 
     /**
@@ -127,12 +148,18 @@ export default class Holl {
      * @param {any} ctx 
      */
     attachEvent(ctx) {
-        
-        let circle = new PIXI.Graphics()
-        circle.lineStyle(1, 0xFF3300, 1);
-        circle.drawCircle(this.x + this.width/2, this.y + this.width/2, this.width / 4)
-        this.circle = circle
-        this.app.getStage().addChild(circle)
+        let circles = []
+
+        const max_width = this.width * 1 / 4
+        for (let i = 0; i<MAX_LEVEL; i++) {
+            const circle = new PIXI.Graphics()
+            circle.lineStyle(1, 0xFF3300, 1);
+            circle.drawCircle(this.x + this.width/2, this.y + this.width/2, max_width * (i + 1) / MAX_LEVEL)
+            circle.visible = false
+            circles.push(circle)
+            this.app.getStage().addChild(circle)
+        }
+        this.circles = circles
     }
 
     /**
@@ -140,8 +167,11 @@ export default class Holl {
      * @param {any} ctx 
      */
     detachEvent(ctx) {
-        if (this.circle) {
-            this.app.getStage().removeChild(this.circle)
+        if (this.circles) {
+            for (const circle of this.circles) {
+                this.app.getStage().removeChild(circle)
+            }
+            this.circles = []
         }
     }
 
