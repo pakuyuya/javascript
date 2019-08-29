@@ -192,6 +192,7 @@ export default class Player {
                 this.app.fire('digHoll', holl, this)
 
             })()
+            return
         }
         if (!direction && this.app.inputHandler.isPushed('b')) {
             // 穴掘り試行
@@ -206,6 +207,7 @@ export default class Player {
                     // TODO: 穴掘りグレードアップしたときの同期的アニメーション実装
                 }
             })()
+            return
         }
     }
 
