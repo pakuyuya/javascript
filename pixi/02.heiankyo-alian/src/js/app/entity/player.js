@@ -51,6 +51,8 @@ export default class Player {
 
         this.moved = false
         this.frameToStep = FRAME_DULATION_BY_STEP
+
+        this.dead = false
     }
 
     resources () {
@@ -80,6 +82,10 @@ export default class Player {
      * @param ctx
      */
     updateEvent(ctx) {
+        if (this.dead) {
+            return
+        }
+
         let direction = this.detectPushedArrow()
         this.moved = false
 
@@ -235,11 +241,43 @@ export default class Player {
     }
 
     /**
+     * 死亡イベント
+     */
+    dieEvent(ctx) {
+        this.dead = true
+        // TODO: 
+    }
+
+    /**
+     * 蘇生イベント
+     */
+    revibeEvent(ctx) {
+        if (!this.dead) {
+            return
+        }
+
+        this.dead = false
+        // TODO:
+    }
+
+    /**
      * 事後updateイベント
      * @param ctx
      */
-    preUpdateEvent(ctx) {
-        // TODO:
+    postUpdateEvent(ctx) {
+        const alians = this.parent.map.getCollisions(this, 'alian')
+        if (alians && alians.length) {
+            console.log('ate')
+            this.app.fire('eatPlayer', alians[0], {sender: this})
+            return
+        }
+
+        const holls = this.parent.map.getCollisions(this, 'entity')
+        if (holls && holls.length) {
+            console.log('fall')
+            this.app.fire('fallPlayer', holls[0], {sender: this})
+            return
+        }
     }
 
     /**
