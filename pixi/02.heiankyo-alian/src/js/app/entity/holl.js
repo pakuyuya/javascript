@@ -176,12 +176,12 @@ export default class Holl {
     }
 
     isCollision (sender, collisionType) {
-        const x = this.x + this.width / 2
-        const y = this.y + this.height / 2
+        const x = this.x + this.width / 4
+        const y = this.y + this.height / 4
         const w = this.width / 2
         const h = this.height / 2
 
-        return sender.x <= x + w && sender.x + sender.width >= x
-                && sender.y <= y + h && sender.y + sender.height >= y
+        return sender.x < x + w && sender.x + sender.width > x
+                && sender.y < y + h && sender.y + sender.height > y
     }
 }

@@ -157,10 +157,8 @@ export default class Player {
                     return adjustTo
                 })()
                 
-                console.log(constants.pixByStep )
                 this.moveRemainFrames = constants.pixByBlock / 2 / constants.pixByStep
                 this.moveTo = moveTo
-                console.log(this.moveRemainFrames)
             }
 
             if (this.moveRemainFrames <= 0) {
