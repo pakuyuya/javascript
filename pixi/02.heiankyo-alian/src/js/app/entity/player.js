@@ -272,7 +272,7 @@ export default class Player {
             return
         }
 
-        const holls = this.parent.map.getCollisions(this, 'entity')
+        const holls = this.parent.map.getCollisions(this, 'holl')
         if (holls && holls.length) {
             console.log('fall')
             this.app.fire('fallPlayer', holls[0], {sender: this})
