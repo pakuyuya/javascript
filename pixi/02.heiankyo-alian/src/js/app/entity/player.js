@@ -115,12 +115,17 @@ export default class Player {
                     break
                 }
                 
-                // 壁と衝突判定をとり、xyを補正する
+                // 穴や壁と衝突判定をとり、xyを補正する
                 moveTo = (() => {
                     let collisionTestObject = Object.assign({}, this)
                     collisionTestObject.x = moveTo.x
                     collisionTestObject.y = moveTo.y
 
+                    const holls = this.parent.map.getCollisions(collisionTestObject, 'hollEasy')
+                    if (holls && holls.length > 0) {
+                        // 穴があった場合止まる
+                        return {x: this.x, y: this.y}
+                    }
                     let collisions = this.parent.map.getCollisions(collisionTestObject, 'wall')
 
                     if (!collisions || collisions.length === 0) {
@@ -296,13 +301,6 @@ export default class Player {
         if (alians && alians.length) {
             console.log('ate')
             this.app.fire('eatPlayer', alians[0], {sender: this})
-            return
-        }
-
-        const holls = this.parent.map.getCollisions(this, 'hollEasy')
-        if (holls && holls.length) {
-            console.log('fall')
-            this.app.fire('fallPlayer', holls[0], {sender: this})
             return
         }
     }
