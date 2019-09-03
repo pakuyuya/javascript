@@ -3,7 +3,7 @@ import constants from "../common/constants"
 
 import * as PIXI from 'pixi.js'
 
-const MAX_LEVEL = 4
+const MAX_LEVEL = 5
 const DIG_INTEVAL = 15
 
 /**
