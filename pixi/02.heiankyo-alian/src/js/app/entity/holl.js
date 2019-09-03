@@ -32,6 +32,7 @@ export default class Holl {
 
         this.collisions = [
             'holl',
+            'hollEasy',
         ]
 
         this.app = args.app
@@ -176,12 +177,24 @@ export default class Holl {
     }
 
     isCollision (sender, collisionType) {
-        const x = this.x + this.width / 4
-        const y = this.y + this.height / 4
-        const w = this.width / 2
-        const h = this.height / 2
+        if (collisionType === 'holl') {
+            const x = this.x + this.width / 4
+            const y = this.y + this.height / 4
+            const w = this.width / 2
+            const h = this.height / 2
 
-        return sender.x < x + w && sender.x + sender.width > x
-                && sender.y < y + h && sender.y + sender.height > y
+            return sender.x < x + w && sender.x + sender.width > x
+                    && sender.y < y + h && sender.y + sender.height > y
+        }
+        if (collisionType === 'hollEasy') {
+            const x = (this.x < sender.x) ? this.x - this.width / 2 : this.x + this.width / 2 
+            const y = (this.y < sender.y) ? this.y - this.height / 2 : this.y + this.height / 2
+            const w = this.width
+            const h = this.height
+
+            return sender.x < x + w && sender.x + sender.width > x
+                    && sender.y < y + h && sender.y + sender.height > y
+        }
+        return false
     }
 }
