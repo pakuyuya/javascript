@@ -19,8 +19,8 @@ export default class Alian {
         }
 
         this.collisions = [
-            'player',
-            'holl',
+            'alian',
+            'alianEasy',
         ]
 
         this.app = args.app
@@ -87,7 +87,7 @@ export default class Alian {
     /**
      * 攻撃受けたイベント
      */
-    dropHollEvent(ctx) {
+    fallHollEvent(ctx) {
         // TODO:
     }
 
@@ -132,7 +132,24 @@ export default class Alian {
     }
 
     isCollision (sender, collisionType) {
-        return sender.x <= this.x + this.width && sender.x + sender.width >= this.x
-                && sender.y <= this.y + this.height && sender.y + sender.height >= this.y
+        if (collisionType === 'alian') {
+            const x = this.x + this.width / 4
+            const y = this.y + this.height / 4
+            const w = this.width / 2
+            const h = this.height / 2
+
+            return sender.x < x + w && sender.x + sender.width > x
+                    && sender.y < y + h && sender.y + sender.height > y
+        }
+        if (collisionType === 'alianEasy') {
+            const x = (this.x < sender.x) ? this.x - this.width / 2 : this.x + this.width / 2 
+            const y = (this.y < sender.y) ? this.y - this.height / 2 : this.y + this.height / 2
+            const w = this.width
+            const h = this.height
+
+            return sender.x < x + w && sender.x + sender.width > x
+                    && sender.y < y + h && sender.y + sender.height > y
+        }
+        return false
     }
 }
