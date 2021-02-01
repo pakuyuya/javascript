@@ -36,7 +36,7 @@ export default class Alian {
 
     resources () {
         return {
-            images : [],
+            images : ['alien1.png','alien2.png'],
             sounds : []
         }
     }
